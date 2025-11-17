@@ -4,7 +4,7 @@
 const lecturers = [
  {
   "key": "le_hieu_hoc",
-  "img": "img/thay-hoc.jpg",
+  "img": "thay-hoc.jpg",
   "name": "PGS.TS. Lê Hiếu Học",
   "title": "Trưởng khoa",
   "dept": "Khoa Khoa học & Công nghệ Giáo dục, Đại học Bách khoa Hà Nội",
@@ -44,7 +44,7 @@ const lecturers = [
 },
 {
   "key": "pham_thi_thanh_hai",
-  "img": "img/pham_thi_thanh_hai.jpg",
+  "img": "pham_thi_thanh_hai.jpg",
   "name": "PGS.TS. Phạm Thị Thanh Hải",
   "title": "Phó Trưởng khoa, Giảng viên cao cấp",
   "dept": "Khoa Khoa học & Công nghệ Giáo dục, Đại học Bách Khoa Hà Nội",
@@ -79,7 +79,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_thi_huyen",
-  "img": "img/co-huyen.jpg",
+  "img": "co-huyen.jpg",
   "name": "TS. Nguyễn Thị Huyền",
   "title": "Giảng viên / Giám đốc CTĐT ngành Công nghệ Giáo dục",
   "dept": "Nhóm chuyên môn Công nghệ Giáo dục, Khoa Khoa học & Công nghệ Giáo dục, Trường Đại học Bách Khoa Hà Nội",
@@ -108,7 +108,7 @@ const lecturers = [
 },
 {
   "key": "bui_ngoc_son",
-  "img": "img/thay-son.jpg",
+  "img": "thay-son.jpg",
   "name": "ThS. Bùi Ngọc Sơn",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -158,7 +158,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_thi_thanh_tu",
-  "img": "img/co-tu.jpg",
+  "img": "co-tu.jpg",
   "name": "TS. Nguyễn Thị Thanh Tú",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -189,7 +189,7 @@ const lecturers = [
 },
 {
   "key": "vu_dinh_minh",
-  "img": "img/thay-minh.jpg",
+  "img": "thay-minh.jpg",
   "name": "TS. Vũ Đình Minh",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -218,7 +218,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_thi_thanh_thuy",
-  "img": "img/co-thuy.jpg",
+  "img": "co-thuy.jpg",
   "name": "TS. Nguyễn Thị Thanh Thủy",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -249,7 +249,7 @@ const lecturers = [
 },
 {
   "key": "dang_thu_huong",
-  "img": "img/co-huong.jpg",
+  "img": "co-huong.jpg",
   "name": "ThS. Đặng Thu Hương",
   "title": "Giảng viên thực hành",
   "dept": "Nhóm chuyên môn Công nghệ Giáo dục, Khoa Khoa học & Công nghệ Giáo dục, Đại học Bách Khoa Hà Nội",
@@ -288,7 +288,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_yen_chi",
-  "img": "img/co-chi.jpg",
+  "img": "co-chi.jpg",
   "name": "ThS. Nguyễn Yến Chi",
   "title": "Giảng viên",
   "dept": "Khoa Khoa học & Công nghệ Giáo dục, Trường Đại học Bách Khoa Hà Nội",
@@ -316,7 +316,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_tran_khanh_phuong",
-  "img": "img/khanh-phuong.jpg",
+  "img": "khanh-phuong.jpg",
   "name": "CN. Nguyễn Trần Khánh Phương",
   "title": "Giảng viên tạo nguồn",
   "dept": "Nhóm chuyên môn Công nghệ Giáo dục, Khoa Khoa học & Công nghệ Giáo dục, Đại học Bách khoa Hà Nội",
@@ -335,7 +335,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_van_hanh",
-  "img": "img/thay-hanh.jpg",
+  "img": "thay-hanh.jpg",
   "name": "TS. Nguyễn Văn Hạnh",
   "title": "Giảng viên",
   "dept": "Bộ môn Khoa học và Công nghệ giáo dục, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -374,7 +374,7 @@ const lecturers = [
 },
 {
   "key": "bui_thi_thuy_hang",
-  "img": "img/co-hang.jpg",
+  "img": "co-hang.jpg",
   "name": "PGS.TS. Bùi Thị Thúy Hằng",
   "title": "Giảng viên cao cấp",
   "dept": "Nhóm chuyên môn Quản lý Giáo dục, Khoa học & Công nghệ Giáo dục, Đại học Bách Khoa Hà Nội",
@@ -418,7 +418,7 @@ const lecturers = [
 },
 {
   "key": "le_huy_tung",
-  "img": "img/thay-tung_1.jpg",
+  "img": "thay-tung_1.jpg",
   "name": "PGS.TS. Lê Huy Tùng",
   "title": "Giảng viên chính; Phó Viện trưởng Viện Đào tạo Liên tục",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội (kiêm nhiệm Phó Viện trưởng Viện Đào tạo Liên tục)",
@@ -458,7 +458,7 @@ const lecturers = [
 },
 {
   "key": "pham_manh_ha",
-  "img": "img/thay-ha.jpg",
+  "img": "thay-ha.jpg",
   "name": "PGS.TS. Phạm Mạnh Hà",
   "title": "Giảng viên cao cấp",
   "dept": "Khoa Khoa học và Công nghệ Giáo dục, Đại học Bách khoa Hà Nội",
@@ -489,7 +489,7 @@ const lecturers = [
 },
 {
   "key": "duong_thi_thuy_mai",
-  "img": "img/co-mai.jpg",
+  "img": "co-mai.jpg",
   "name": "TS. Dương Thị Thùy Mai",
   "title": "Giảng viên; Phó Giám đốc Trung tâm Đào tạo Liên tục",
   "dept": "Bộ môn Công nghệ Giáo dục, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -531,7 +531,7 @@ const lecturers = [
 },
 {
   "key": "nguyen_tien_long",
-  "img": "img/thay-long.jpg",
+  "img": "thay-long.jpg",
   "name": "TS. Nguyễn Tiến Long",
   "title": "Giảng viên; Phó Viện trưởng",
   "dept": "Bộ môn Khoa học & Công nghệ Giáo dục, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
@@ -570,7 +570,7 @@ const lecturers = [
 },
 {
   "key": "pham_hong_hanh",
-  "img": "img/co-hanh.jpg",
+  "img": "co-hanh.jpg",
   "name": "ThS. Phạm Hồng Hạnh",
   "title": "Giảng viên",
   "dept": "Viện Sư phạm Kỹ thuật, Trường Đại học Bách Khoa Hà Nội",
@@ -602,7 +602,7 @@ const lecturers = [
 },
 {
   "key": "hoang_thi_quynh_lan",
-  "img": "img/co-lan.jpg",
+  "img": "co-lan.jpg",
   "name": "TS. Hoàng Thị Quỳnh Lan",
   "title": "Giảng viên",
   "dept": "Bộ môn Khoa học & Công nghệ Giáo dục, Viện Sư phạm Kỹ thuật, Trường Đại học Bách Khoa Hà Nội",
@@ -641,7 +641,7 @@ const lecturers = [
 },
 {
   "key": "tran_thi_thanh_ha",
-  "img": "img/co-ha.jpg",
+  "img": "co-ha.jpg",
   "name": "TS. Trần Thị Thanh Hà",
   "title": "Giảng viên",
   "dept": "Khoa Khoa học & Công nghệ Giáo dục, Trường Đại học Bách Khoa Hà Nội",
