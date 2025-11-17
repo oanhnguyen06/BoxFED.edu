@@ -154,7 +154,8 @@ const lecturers = [
       "2009: Phát triển hệ thống bài trắc nghiệm khách quan cho các môn học sư phạm tại Khoa SPKT, đề tài cấp Bộ GD&ĐT",
       "2015: Xây dựng bộ tiêu chí và quy trình đánh giá theo năng lực trong tuyển sinh khối ĐH kỹ thuật"
      ]
-  },
+  }
+},
 {
   "key": "nguyen_thi_thanh_tu",
   "img": "img/co-tu.jpg",
@@ -245,7 +246,7 @@ const lecturers = [
     "Quản lý giáo dục",
     "Phân tích và dự báo nhu cầu đào tạo nhân lực"
   ]
-}
+},
 {
   "key": "dang_thu_huong",
   "img": "img/co-huong.jpg",
@@ -445,7 +446,7 @@ const lecturers = [
     "ED4090: Technical Writing and Presentation",
     "ED4110: Các công nghệ giáo dục tiên tiến",
     "ED6110: Quản lý chất lượng giáo dục nghề nghiệp (Thạc sĩ)",
-    "ED7070: Kỹ năng mềm trong ng"
+    "ED7070: Kỹ năng mềm trong nghiên cứu"
   ],
 
   "area": [
