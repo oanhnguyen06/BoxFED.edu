@@ -4,7 +4,7 @@
 const lecturers = [
  {
   "key": "le_hieu_hoc",
-  "img": "img/thay-hoc.jpg",
+  "img": "img/thay-hoc.png",
   "name": "PGS.TS. Lê Hiếu Học",
   "title": "Trưởng khoa",
   "dept": "Khoa Khoa học & Công nghệ Giáo dục, Đại học Bách khoa Hà Nội",
@@ -44,7 +44,7 @@ const lecturers = [
 },
 {
   "key": "pham_thi_thanh_hai",
-  "img": "img/pham_thi_thanh_hai.jpg",
+  "img": "img/co-hai.jpg",
   "name": "PGS.TS. Phạm Thị Thanh Hải",
   "title": "Phó Trưởng khoa, Giảng viên cao cấp",
   "dept": "Khoa Khoa học & Công nghệ Giáo dục, Đại học Bách Khoa Hà Nội",
