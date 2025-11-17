@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BK Lecturer Store — Danh sách giảng viên</title>
+
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+</head>
+<body>
+<header class="site-header">
+    <div class="logo-zone">
+        <img src="img/logo-bk.png" alt="Logo BK" class="logo" />
+        <span class="brand">BK LECTURER STORE</span>
+    </div>
+
+    <nav class="main-nav">
+        <a href="index.html" class="active">Trang chủ</a>
+        <a href="lecturers.html">Giảng viên</a>
+        <a href="#">Review</a>
+        <a href="#">Chatbot</a>
+        <a href="#">Liên hệ</a>
+    </nav>
+
+    <div class="search-bar">
+        <input id="search-input" type="search" placeholder="Tìm giảng viên theo tên / lĩnh vực..." />
+        <button id="search-btn" title="Tìm"><i class="fa fa-search"></i></button>
+    </div>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <h1>Danh sách giảng viên — Khoa KH&CN Giáo dục</h1>
+        <p class="lead">Click vào ảnh hoặc tên để xem chi tiết. Phân trang hiển thị <strong>4 giảng viên / trang</strong>.</p>
+    </section>
+
+    <section id="grid-wrap">
+        <div id="lecturer-grid" class="grid"></div>
+        <div id="pagination" class="pagination"></div>
+    </section>
+</main>
+
+<!-- Modal detail -->
+<div id="modal-bg" class="modal-bg" style="display:none" onclick="closeModal()"></div>
+<div id="modal-box" class="modal" style="display:none" role="dialog" aria-modal="true">
+    <button class="modal-close" onclick="closeModal()" aria-label="Đóng">&times;</button>
+    <div id="modal-content"></div>
+</div>
+
+<!-- Chatbot -->
+<div class="chatbot-widget">
+    <button class="chatbot-toggle" onclick="toggleChatbot()" title="Trợ lý"><i class="fa-solid fa-robot"></i> Trợ lý</button>
+
+    <div id="chatbot-box" class="chatbot-box" style="display:none">
+        <div class="chatbot-head">Chatbot Tâm sự Giảng Viên</div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="msg bot">Chào bạn! Bạn muốn tìm giảng viên nào?</div>
+        </div>
+        <div class="chatbot-action">
+            <input id="chatbot-input" type="text" placeholder="Nhập tin nhắn..." />
+            <button id="chatbot-send" onclick="sendChat()">Gửi</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
