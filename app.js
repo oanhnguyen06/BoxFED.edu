@@ -41,7 +41,7 @@ const lecturers = [
     "Liên kết Đại học – Doanh nghiệp, chuyển giao công nghệ",
     "Quản lý giáo dục & phát triển chương trình đào tạo"
   ]
-}
+},
 {
   "key": "pham_thi_thanh_hai",
   "img": "img/pham_thi_thanh_hai.jpg",
@@ -76,7 +76,7 @@ const lecturers = [
     "Nghiên cứu đánh giá năng lực chuyên môn GV mới vào nghề & điều chỉnh cho đào tạo bồi dưỡng GV, ĐHQGHN",
     "Nghiên cứu phát triển chuyên môn cho GV phổ thông đáp ứng yêu cầu năng lực nghề nghiệp trong bối cảnh đổi mới, NAFOSTED"
   ]
-}
+},
 {
   "key": "nguyen_thi_huyen",
   "img": "img/co-huyen.jpg",
@@ -105,7 +105,7 @@ const lecturers = [
     "Interactive Systems",
     "GenAI Learning"
   ]
-}
+},
 {
   "key": "bui_ngoc_son",
   "img": "img/thay-son.jpg",
@@ -152,7 +152,9 @@ const lecturers = [
       "2005: Khả năng ứng dụng e-learning trong dạy học các môn kỹ thuật, đề tài cấp Bộ GD&ĐT",
       "2007: Phát triển khung tiêu chí đánh giá chất lượng đào tạo kỹ thuật và dạy nghề tại Việt Nam, đề tài cấp Bộ GD&ĐT",
       "2009: Phát triển hệ thống bài trắc nghiệm khách quan cho các môn học sư phạm tại Khoa SPKT, đề tài cấp Bộ GD&ĐT",
-      "2015: Xây dựng bộ tiêu chí và quy trình đánh giá theo năng lực trong tuyển sinh khối ĐH kỹ
+      "2015: Xây dựng bộ tiêu chí và quy trình đánh giá theo năng lực trong tuyển sinh khối ĐH kỹ thuật"
+     ]
+  },
 {
   "key": "nguyen_thi_thanh_tu",
   "img": "img/co-tu.jpg",
@@ -183,7 +185,7 @@ const lecturers = [
     "Công nghệ giáo dục",
     "Hệ thống thông tin"
   ]
-}
+},
 {
   "key": "vu_dinh_minh",
   "img": "img/thay-minh.jpg",
@@ -212,7 +214,7 @@ const lecturers = [
     "Hệ thống thông tin",
     "Công nghệ giáo dục"
   ]
-}
+},
 {
   "key": "nguyen_thi_thanh_thuy",
   "img": "img/co-thuy.jpg",
@@ -282,7 +284,7 @@ const lecturers = [
     "Lý luận và phương pháp dạy học",
     "E-learning, B-learning"
   ]
-}
+},
 {
   "key": "nguyen_yen_chi",
   "img": "img/co-chi.jpg",
@@ -310,7 +312,7 @@ const lecturers = [
     "Công nghệ giáo dục",
     "Học tập tự điều chỉnh"
   ]
-}
+},
 {
   "key": "nguyen_tran_khanh_phuong",
   "img": "img/khanh-phuong.jpg",
@@ -329,7 +331,7 @@ const lecturers = [
     "07/2025 – nay: Giảng viên tạo nguồn, Khoa Khoa học & Công nghệ Giáo dục, ĐHBK Hà Nội",
     "09/2024 – 06/2025: Cán bộ, Trung tâm Truyền thông & Tri thức số, ĐHBK Hà Nội"
   ]
-}
+},
 {
   "key": "nguyen_van_hanh",
   "img": "img/thay-hanh.jpg",
@@ -368,7 +370,7 @@ const lecturers = [
     "Giáo dục STEM",
     "Giáo dục dựa vào trải nghiệm"
   ]
-}
+},
 {
   "key": "bui_thi_thuy_hang",
   "img": "img/co-hang.jpg",
@@ -412,7 +414,7 @@ const lecturers = [
     "Giáo dục đại học ở Việt Nam và trên thế giới",
     "Sư phạm thông minh và nhà trường thông minh"
   ]
-}
+},
 {
   "key": "le_huy_tung",
   "img": "img/thay-tung_1.jpg",
@@ -452,7 +454,7 @@ const lecturers = [
     "Công nghệ giáo dục",
     "Tự động hóa trong giáo dục"
   ]
-}
+},
 {
   "key": "pham_manh_ha",
   "img": "img/thay-ha.jpg",
@@ -483,7 +485,7 @@ const lecturers = [
     "Tư vấn tâm lý học đường",
     "Phát triển kỹ năng sống"
   ]
-}
+},
 {
   "key": "duong_thi_thuy_mai",
   "img": "img/co-mai.jpg",
@@ -525,7 +527,7 @@ const lecturers = [
     "Giảng dạy ngoại ngữ và CLIL",
     "Giáo dục nghề nghiệp"
   ]
-}
+},
 {
   "key": "nguyen_tien_long",
   "img": "img/thay-long.jpg",
@@ -564,7 +566,7 @@ const lecturers = [
   "projects": [
     "01/2018 – 12/2018: Đề xuất giải pháp phát triển CTĐT Sư phạm Kỹ thuật CNTT phù hợp nhu cầu thực tiễn cơ sở đào tạo (Mã số: T2017-PC-160)"
   ]
-}
+},
 {
   "key": "pham_hong_hanh",
   "img": "img/co-hanh.jpg",
@@ -596,7 +598,7 @@ const lecturers = [
     "Lý luận và phương pháp dạy học",
     "Ứng dụng công nghệ trong dạy học"
   ]
-}
+},
 {
   "key": "hoang_thi_quynh_lan",
   "img": "img/co-lan.jpg",
@@ -635,7 +637,7 @@ const lecturers = [
     "Tham vấn, tư vấn tâm lý",
     "Tư vấn hướng nghiệp cho thanh thiếu niên"
   ]
-}
+},
 {
   "key": "tran_thi_thanh_ha",
   "img": "img/co-ha.jpg",
