@@ -418,7 +418,7 @@ const lecturers = [
 },
 {
   "key": "le_huy_tung",
-  "img": "img/thay-tung_1.jpg",
+  "img": "img/thay-tung_1.png",
   "name": "PGS.TS. Lê Huy Tùng",
   "title": "Giảng viên chính; Phó Viện trưởng Viện Đào tạo Liên tục",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội (kiêm nhiệm Phó Viện trưởng Viện Đào tạo Liên tục)",
