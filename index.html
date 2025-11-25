@@ -49,4 +49,23 @@
     <div id="modal-content"></div>
 </div>
 
+<!-- Chatbot -->
+<div class="chatbot-widget">
+    <button class="chatbot-toggle" onclick="toggleChatbot()" title="Trợ lý"><i class="fa-solid fa-robot"></i> Trợ lý</button>
+
+    <div id="chatbot-box" class="chatbot-box" style="display:none">
+        <div class="chatbot-head">BoxFED</div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="msg bot">Chào bạn! Bạn cần giúp gì không?</div>
+        </div>
+        <div class="chatbot-action">
+            <input id="chatbot-input" type="text" placeholder="Nhập tin nhắn..." />
+            <button id="chatbot-send" onclick="sendChat()">Gửi</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
 
