@@ -845,3 +845,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
   filtered = [...lecturers];
   renderGrid(1);
 });
+async function sendChat() {
+    const input = document.getElementById("chatbot-input");
+    const msg = input.value;
+
+    addMessage(msg, "user");
+
+    const res = await fetch("http://localhost/3000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+    });
+
+    const data = await res.json();
+    addMessage(data.reply, "bot");
+    input.value = "";
+}
