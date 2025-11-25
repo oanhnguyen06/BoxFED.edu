@@ -88,18 +88,7 @@ a{color:inherit; text-decoration:none}
 .modal-info p{margin:6px 0; color:#344063}
 .modal-info ul{padding-left:18px; margin:8px 0 16px}
 
-/* chatbot */
-.chatbot-widget{position:fixed; right:24px; bottom:24px; z-index:200; display:flex; flex-direction:column; align-items:flex-end; gap:8px}
-.chatbot-toggle{background:var(--blue); color:#fff; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(23,107,215,0.18)}
-.chatbot-box{width:320px; background:#fff; border-radius:10px; box-shadow:0 8px 30px rgba(20,40,100,0.15); overflow:hidden}
-.chatbot-head{background:var(--blue); color:#fff; padding:10px; font-weight:700}
-.chatbot-messages{max-height:180px; overflow:auto; padding:12px; background:#f6fbff}
-.msg{margin:8px 0; padding:10px 12px; border-radius:12px; display:inline-block; max-width:86%}
-.msg.bot{background:#e6f0ff; color:var(--brand)}
-.msg.user{background:var(--blue); color:#fff; float:right}
-.chatbot-action{display:flex; gap:8px; padding:10px; background:#eef6ff}
-.chatbot-action input{flex:1; padding:8px 10px; border-radius:8px; border:1px solid #dbeafe}
-.chatbot-action button{background:#0b63c8; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer}
+
 
 /* utilities */
 .empty{padding:36px; text-align:center; color:var(--muted)}
