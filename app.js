@@ -830,13 +830,14 @@ function addMessage(text, sender){
     box.scrollTop = box.scrollHeight;
 }
 
-// ======================================================
-// ======== CHATBOT GỌI API OLLAMA =======
-// ======================================================
-async function sendChat(){
+// ================================================================
+// =================== CHATBOT GỌI API OLLAMA =====================
+// ================================================================
+
+async function sendChat() {
     const input = document.getElementById("chatbot-input");
     const msg = input.value.trim();
-    if(!msg) return;
+    if (!msg) return;
 
     addMessage(msg, "user");
 
@@ -849,13 +850,15 @@ async function sendChat(){
 
         const data = await res.json();
         addMessage(data.reply, "bot");
-    }
-    catch(err){
+    } 
+    catch (err) {
         addMessage("❌ Lỗi kết nối server chatbot!", "bot");
+        console.error("Chatbot error:", err);
     }
 
     input.value = "";
 }
+
 
 // ======================================================
 // ===================== KHỞI TẠO ========================
