@@ -40,7 +40,10 @@ def load_documents(base_dir: str, filenames: List[str]) -> str:
         except Exception as e:
             parts.append(f"[ERROR READING {fn}: {e}]")
     full = "\n\n".join(parts)
-    # Simple protection: cap length (characters) to avoid huge prompts
+      # Simple protection: cap length (characters) to avoid huge prompts
     MAX_CHARS = 60_000
     if len(full) > MAX_CHARS:
-        full
+        full = full[:MAX_CHARS] + "\n\n...[TRUNCATED FOR LENGTH]..."
+
+    return full
+ 
