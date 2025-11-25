@@ -798,66 +798,69 @@ function closeModal(){
   document.body.style.overflow = '';
 }
 
-// ============ CHATBOT (mini) ============
+// ======================================================
+// ================= CHATBOT MINI ========================
+// ======================================================
 function toggleChatbot(){
   const box = document.getElementById('chatbot-box');
   box.style.display = box.style.display === 'block' ? 'none' : 'block';
 }
-function sendChat(){
-  const input = document.getElementById('chatbot-input');
-  const q = (input.value || '').trim();
-  if(!q) return;
-  const messages = document.getElementById('chatbot-messages');
-  messages.innerHTML += `<div class="msg user">${escapeHtml(q)}</div>`;
-  // simple intent: if contains name, try to find lecturer
-  setTimeout(()=> {
-    const found = searchLecturerByText(q);
-    if(found){
-      messages.innerHTML += `<div class="msg bot">Mình tìm thấy <strong>${found.name}</strong>. Nhấn vào tên để xem chi tiết, hoặc gõ "email ${found.key}" để lấy email.</div>`;
-    } else if(q.toLowerCase().startsWith('email ')){
-      const key = q.split(' ')[1];
-      const lec = lecturers.find(x => x.key === key);
-      messages.innerHTML += `<div class="msg bot">${lec ? `Email của ${lec.name}: ${lec.email}` : 'Không tìm thấy giảng viên theo mã.'}</div>`;
-    } else {
-      messages.innerHTML += `<div class="msg bot">Mình nhận được rồi! Bạn có thể tìm theo tên ở ô tìm kiếm hoặc hỏi "tên giảng viên".</div>`;
-    }
-    messages.scrollTop = messages.scrollHeight;
-  }, 400);
-  input.value = '';
-}
 
 function searchLecturerByText(text){
   const q = text.toLowerCase();
-  // try to find by exact key or name contains
   let found = lecturers.find(l => l.key === q);
   if(found) return found;
-  found = lecturers.find(l => l.name.toLowerCase().includes(q) || (l.area||[]).some(a => a.toLowerCase().includes(q)));
+  found = lecturers.find(
+      l => l.name.toLowerCase().includes(q)
+            || (l.area||[]).some(a => a.toLowerCase().includes(q))
+  );
   return found || null;
 }
 
-// small helper
 function escapeHtml(s){
-  return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+  return s.replaceAll('&','&amp;')
+          .replaceAll('<','&lt;')
+          .replaceAll('>','&gt;');
 }
 
-// ============ INITIALIZE ============
-document.addEventListener('DOMContentLoaded', ()=>{
-  filtered = [...lecturers];
-  renderGrid(1);
-});
-async function sendChat() {
+// ---------------- OLD chatbot fallback ----------------
+function addMessage(text, sender){
+    const box = document.getElementById("chatbot-messages");
+    box.innerHTML += `<div class="msg ${sender}">${escapeHtml(text)}</div>`;
+    box.scrollTop = box.scrollHeight;
+}
+
+// ======================================================
+// ======== CHATBOT GỌI API OLLAMA =======
+// ======================================================
+async function sendChat(){
     const input = document.getElementById("chatbot-input");
-    const msg = input.value;
+    const msg = input.value.trim();
+    if(!msg) return;
 
     addMessage(msg, "user");
 
-    const res = await fetch("http://localhost/3000/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg })
-    });
+    try {
+        const res = await fetch("http://localhost:3000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: msg })
+        });
 
-    const data = await res.json();
-    addMessage(data.reply, "bot");
+        const data = await res.json();
+        addMessage(data.reply, "bot");
+    }
+    catch(err){
+        addMessage("❌ Lỗi kết nối server chatbot!", "bot");
+    }
+
     input.value = "";
 }
+
+// ======================================================
+// ===================== KHỞI TẠO ========================
+// ======================================================
+document.addEventListener("DOMContentLoaded", ()=>{
+    filtered = [...lecturers];
+    renderGrid(1);
+});
