@@ -798,66 +798,7 @@ function closeModal(){
   document.body.style.overflow = '';
 }
 
-// ======================================================
-// ================= CHATBOT MINI ========================
-// ======================================================
-function toggleChatbot(){
-  const box = document.getElementById('chatbot-box');
-  box.style.display = box.style.display === 'block' ? 'none' : 'block';
-}
 
-function searchLecturerByText(text){
-  const q = text.toLowerCase();
-  let found = lecturers.find(l => l.key === q);
-  if(found) return found;
-  found = lecturers.find(
-      l => l.name.toLowerCase().includes(q)
-            || (l.area||[]).some(a => a.toLowerCase().includes(q))
-  );
-  return found || null;
-}
-
-function escapeHtml(s){
-  return s.replaceAll('&','&amp;')
-          .replaceAll('<','&lt;')
-          .replaceAll('>','&gt;');
-}
-
-// ---------------- OLD chatbot fallback ----------------
-function addMessage(text, sender){
-    const box = document.getElementById("chatbot-messages");
-    box.innerHTML += `<div class="msg ${sender}">${escapeHtml(text)}</div>`;
-    box.scrollTop = box.scrollHeight;
-}
-
-// ================================================================
-// =================== CHATBOT GỌI API OLLAMA =====================
-// ================================================================
-
-async function sendChat() {
-    const input = document.getElementById("chatbot-input");
-    const msg = input.value.trim();
-    if (!msg) return;
-
-    addMessage(msg, "user");
-
-    try {
-        const res = await fetch("http://localhost:3000/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: msg })
-        });
-
-        const data = await res.json();
-        addMessage(data.reply, "bot");
-    } 
-    catch (err) {
-        addMessage("❌ Lỗi kết nối server chatbot!", "bot");
-        console.error("Chatbot error:", err);
-    }
-
-    input.value = "";
-}
 
 
 // ======================================================
