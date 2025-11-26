@@ -170,27 +170,26 @@
 </head>
 <body>
 
-    <div id="chatbot-container">
-        <button id="chatbot-toggle" onclick="toggleChatbot()">
-            <span style="margin-right: 5px;">🤖</span> Trợ lý
-        </button>
+    <!-- Chatbot -->
+<div class="chatbot-widget">
+    <button class="chatbot-toggle" onclick="toggleChatbot()" title="Trợ lý"><i class="fa-solid fa-robot"></i> Trợ lý</button>
 
-        <div id="chatbot-box">
-            <div id="chatbot-header">
-                BoxFED
-                <span style="font-size: 1.5em; cursor: pointer;" onclick="toggleChatbot()">×</span>
-            </div>
-            <div id="chatbot-messages">
-                <div class="msg bot">Chào bạn! Tôi là Trợ lý thông minh. Tôi có thể giúp bạn tìm hiểu về 2 ngành học: **Công nghệ Giáo dục (CNGD)** và **Quản lý Giáo dục (QLGD)**.</div>
-            </div>
-            <div id="chatbot-input-container">
-                <input type="text" id="chatbot-input" placeholder="Nhập tin nhắn..." onkeypress="if(event.key === 'Enter') sendChat()">
-                <button id="chatbot-send" onclick="sendChat()">Gửi</button>
-            </div>
+    <div id="chatbot-box" class="chatbot-box" style="display:none">
+        <div class="chatbot-head">BoxFED</div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="msg bot">Chào bạn! Bạn cần giúp gì không?</div>
+        </div>
+        <div class="chatbot-action">
+            <input id="chatbot-input" type="text" placeholder="Nhập tin nhắn..." />
+            <button id="chatbot-send" onclick="sendChat()">Gửi</button>
         </div>
     </div>
+</div>
 
-    <script>
+<script src="app.js"></script>
+</body>
+</html>
+
        
     </script>
 </body>
