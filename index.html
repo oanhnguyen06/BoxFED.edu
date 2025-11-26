@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -8,190 +8,213 @@
 
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
-</head>
-<body>
-<header class="site-header">
-    <div class="logo-zone">
-        <img src="img/logo-bk.png" alt="Logo BK" class="logo" />
-        <span class="brand">BK LECTURER STORE</span>
-    </div>
 
-    <nav class="main-nav">
-        <a href="index.html" class="active">Trang chủ</a>
-        <a href="lecturers.html">Giảng viên</a>
-        <a href="#">Review</a>
-        <a href="#">Chatbot</a>
-        <a href="#">Liên hệ</a>
-    </nav>
-
-    <div class="search-bar">
-        <input id="search-input" type="search" placeholder="Tìm giảng viên theo tên / lĩnh vực..." />
-        <button id="search-btn" title="Tìm"><i class="fa fa-search"></i></button>
-    </div>
-</header>
-
-<main class="container">
-    <section class="hero">
-        <h1>Danh sách giảng viên — Khoa KH&CN Giáo dục</h1>
-        <p class="lead">Click vào ảnh hoặc tên để xem chi tiết. Phân trang hiển thị <strong>4 giảng viên / trang</strong>.</p>
-    </section>
-
-    <section id="grid-wrap">
-        <div id="lecturer-grid" class="grid"></div>
-        <div id="pagination" class="pagination"></div>
-    </section>
-</main>
-
-<!-- Modal detail -->
-<div id="modal-bg" class="modal-bg" style="display:none" onclick="closeModal()"></div>
-<div id="modal-box" class="modal" style="display:none" role="dialog" aria-modal="true">
-    <button class="modal-close" onclick="closeModal()" aria-label="Đóng">&times;</button>
-    <div id="modal-content"></div>
-</div>
-
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot BoxFED</title>
     <style>
-        /* CSS cho phần giao diện */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
+        /* ------------ CHATBOT CSS  ------------ */
 
-        /* Khung chính của Chatbot */
-        #chatbot-container {
+        .chatbot-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 9999;
         }
 
-        /* Nút mở/đóng (Trợ lý) */
-        #chatbot-toggle {
+        .chatbot-toggle {
             background-color: #007bff;
             color: white;
             border: none;
             padding: 10px 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* Hộp Chatbot (BoxFED) */
-        #chatbot-box {
+        .chatbot-box {
             width: 350px;
-            height: 500px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            display: none; /* Ban đầu ẩn */
-            flex-direction: column;
-            margin-top: 10px;
+            height: 480px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            display: none;
             overflow: hidden;
-        }
-
-        /* Header (BoxFED) */
-        #chatbot-header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            font-size: 1.1em;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Khu vực hiển thị tin nhắn */
-        #chatbot-messages {
-            flex-grow: 1;
-            padding: 15px;
-            overflow-y: auto;
+            margin-top: 8px;
             display: flex;
             flex-direction: column;
         }
 
-        /* Định dạng tin nhắn */
+        .chatbot-head {
+            background-color: #007bff;
+            padding: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+        }
+
         .msg {
             max-width: 80%;
             padding: 8px 12px;
             margin-bottom: 10px;
-            border-radius: 15px;
+            border-radius: 12px;
             line-height: 1.4;
             word-wrap: break-word;
         }
-        .msg.bot {
-            background-color: #e9e9eb;
-            align-self: flex-start;
-        }
-        .msg.user {
-            background-color: #007bff;
-            color: white;
-            align-self: flex-end;
-        }
-        .msg.error {
-            background-color: #ffcccc;
-            color: #cc0000;
-            align-self: flex-start;
-        }
-        
-        /* Khu vực nhập liệu */
-        #chatbot-input-container {
+        .msg.bot { background: #e9e9eb; align-self: flex-start; }
+        .msg.user { background: #007bff; color: white; align-self: flex-end; }
+        .msg.error { background: #ffcccc; color: #cc0000; }
+
+        .chatbot-action {
             padding: 10px;
             border-top: 1px solid #ccc;
             display: flex;
         }
+
         #chatbot-input {
-            flex-grow: 1;
+            flex: 1;
             padding: 10px;
+            border-radius: 6px;
             border: 1px solid #ccc;
-            border-radius: 5px;
             margin-right: 10px;
-            font-size: 1em;
         }
+
         #chatbot-send {
-            background-color: #007bff;
+            padding: 10px 15px;
+            background: #007bff;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
         }
     </style>
 </head>
+
 <body>
-
-    <!-- Chatbot -->
-<div class="chatbot-widget">
-    <button class="chatbot-toggle" onclick="toggleChatbot()" title="Trợ lý"><i class="fa-solid fa-robot"></i> Trợ lý</button>
-
-    <div id="chatbot-box" class="chatbot-box" style="display:none">
-        <div class="chatbot-head">BoxFED</div>
-        <div id="chatbot-messages" class="chatbot-messages">
-            <div class="msg bot">Chào bạn! Bạn cần giúp gì không?</div>
+    <!-- ======= HEADER ======= -->
+    <header class="site-header">
+        <div class="logo-zone">
+            <img src="img/logo-bk.png" alt="Logo BK" class="logo" />
+            <span class="brand">BK LECTURER STORE</span>
         </div>
-        <div class="chatbot-action">
-            <input id="chatbot-input" type="text" placeholder="Nhập tin nhắn..." />
-            <button id="chatbot-send" onclick="sendChat()">Gửi</button>
+
+        <nav class="main-nav">
+            <a href="index.html" class="active">Trang chủ</a>
+            <a href="lecturers.html">Giảng viên</a>
+            <a href="#">Review</a>
+            <a href="#">Chatbot</a>
+            <a href="#">Liên hệ</a>
+        </nav>
+
+        <div class="search-bar">
+            <input id="search-input" type="search" placeholder="Tìm giảng viên theo tên / lĩnh vực..." />
+            <button id="search-btn"><i class="fa fa-search"></i></button>
+        </div>
+    </header>
+
+    <!-- ======= MAIN ======= -->
+    <main class="container">
+        <section class="hero">
+            <h1>Danh sách giảng viên — Khoa KH&CN Giáo dục</h1>
+            <p class="lead">Click vào ảnh hoặc tên để xem chi tiết (4 giảng viên / trang).</p>
+        </section>
+
+        <section id="grid-wrap">
+            <div id="lecturer-grid" class="grid"></div>
+            <div id="pagination" class="pagination"></div>
+        </section>
+    </main>
+
+    <!-- ======= MODAL ======= -->
+    <div id="modal-bg" class="modal-bg" style="display:none" onclick="closeModal()"></div>
+    <div id="modal-box" class="modal" style="display:none">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modal-content"></div>
+    </div>
+
+    <!-- ======= CHATBOT WIDGET ======= -->
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" onclick="toggleChatbot()">
+            <i class="fa-solid fa-robot"></i> Trợ lý
+        </button>
+
+        <div id="chatbot-box" class="chatbot-box">
+            <div class="chatbot-head">BoxFED</div>
+
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="msg bot">Chào bạn! Tôi có thể giúp gì?</div>
+            </div>
+
+            <div class="chatbot-action">
+                <input id="chatbot-input" type="text" placeholder="Nhập tin nhắn..." />
+                <button id="chatbot-send" onclick="sendChat()">Gửi</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="app.js"></script>
-</body>
-</html>
+    <script src="app.js"></script>
 
-       
+    <script>
+        /* ====== JS CHATBOT ====== */
+        function toggleChatbot() {
+            const box = document.getElementById("chatbot-box");
+            box.style.display = box.style.display === "none" ? "flex" : "none";
+        }
+
+        async function sendChat() {
+            const input = document.getElementById("chatbot-input");
+            const msgArea = document.getElementById("chatbot-messages");
+
+            let text = input.value.trim();
+            if (!text) return;
+
+            msgArea.innerHTML += `<div class="msg user">${text}</div>`;
+            input.value = "";
+
+            // call API Ollama
+            try {
+                const res = await fetch("http://localhost:11434/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: "llama3.2",
+                        messages: [{ role: "user", content: text }]
+                    })
+                });
+
+                const reader = res.body.getReader();
+                let botMsg = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    const chunk = new TextDecoder().decode(value);
+                    const lines = chunk.trim().split("\n");
+
+                    lines.forEach(line => {
+                        try {
+                            const json = JSON.parse(line);
+                            if (json.message?.content) {
+                                botMsg += json.message.content;
+                            }
+                        } catch { }
+                    });
+                }
+
+                msgArea.innerHTML += `<div class="msg bot">${botMsg}</div>`;
+            } catch {
+                msgArea.innerHTML += `<div class="msg error">Không kết nối được API Ollama!</div>`;
+            }
+
+            msgArea.scrollTop = msgArea.scrollHeight;
+        }
     </script>
+
 </body>
 </html>
 
