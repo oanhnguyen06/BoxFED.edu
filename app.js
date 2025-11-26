@@ -672,260 +672,119 @@ const lecturers = [
 ];
 // ================ END DATA =====================
 
-// ============ CẤU HÌNH PHÂN TRANG ============
-const ITEMS_PER_PAGE = 4;   // như bạn yêu cầu
+// ====================== PAGINATION =====================
 let currentPage = 1;
-let filtered = [...lecturers];
+const itemsPerPage = 4;
 
-// ============ RENDER GRID ============
-const grid = document.getElementById('lecturer-grid');
-const paginationWrap = document.getElementById('pagination');
+function renderLecturers() {
+  const grid = document.getElementById("lecturerGrid");
+  grid.innerHTML = "";
 
-function renderGrid(page = 1) {
-  currentPage = page;
-  grid.innerHTML = '';
+  let start = (currentPage - 1) * itemsPerPage;
+  let end = start + itemsPerPage;
 
-  const start = (page - 1) * ITEMS_PER_PAGE;
-  const pageItems = filtered.slice(start, start + ITEMS_PER_PAGE);
+  let list = lecturers.slice(start, end);
 
-  if(pageItems.length === 0){
-    grid.innerHTML = `<div class="empty">Không tìm thấy giảng viên.</div>`;
-    renderPagination();
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty">Không tìm thấy giảng viên nào…</div>`;
     return;
   }
 
-  pageItems.forEach(lec => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-top">
-        <img src="${lec.img}" alt="${lec.name}" class="card-img" />
-      </div>
-      <div class="card-body">
-        <h3 class="card-name"><a href="#" class="link-detail" data-key="${lec.key}">${lec.name}</a></h3>
-        <div class="card-title">${lec.title}</div>
-        <div class="card-dept">${lec.dept}</div>
+  list.forEach(l => {
+    grid.innerHTML += `
+      <div class="card" data-key="${l.key}">
+        <div class="card-top">
+          <img src="${l.img}" class="card-img">
+        </div>
+        <div class="card-body">
+          <h3 class="card-name"><a>${l.name}</a></h3>
+          <p class="card-title">${l.title}</p>
+          <p class="card-dept">${l.department}</p>
+        </div>
       </div>
     `;
-    // click image or name -> open modal
-    card.querySelector('.card-img').addEventListener('click', ()=> openDetailByKey(lec.key));
-    card.querySelector('.link-detail').addEventListener('click', (e)=>{ e.preventDefault(); openDetailByKey(lec.key); });
-    grid.appendChild(card);
   });
 
+  attachCardEvents();
   renderPagination();
 }
 
-// ============ PAGINATION UI ============
-function renderPagination(){
-  paginationWrap.innerHTML = '';
-  const total = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  // prev
-  const prev = document.createElement('button');
-  prev.className = 'page-btn';
-  prev.disabled = currentPage === 1;
-  prev.innerHTML = '<i class="fa fa-chevron-left"></i>';
-  prev.addEventListener('click', ()=> renderGrid(currentPage - 1));
-  paginationWrap.appendChild(prev);
 
-  // numbered pages (compact if many)
-  for(let p=1; p<=total; p++){
-    const btn = document.createElement('button');
-    btn.className = 'page-btn num' + (p===currentPage ? ' active' : '');
-    btn.textContent = p;
-    btn.addEventListener('click', ()=> renderGrid(p));
-    paginationWrap.appendChild(btn);
-  }
+// ====================== PAGINATION BUTTONS ==============
+function renderPagination() {
+  const totalPages = Math.ceil(lecturers.length / itemsPerPage);
+  const pag = document.getElementById("pagination");
 
-  // next
-  const next = document.createElement('button');
-  next.className = 'page-btn';
-  next.disabled = currentPage === total;
-  next.innerHTML = '<i class="fa fa-chevron-right"></i>';
-  next.addEventListener('click', ()=> renderGrid(currentPage + 1));
-  paginationWrap.appendChild(next);
-}
-
-// ============ SEARCH ============
-document.getElementById('search-btn').addEventListener('click', doSearch);
-document.getElementById('search-input').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doSearch(); });
-
-function doSearch(){
-  const q = (document.getElementById('search-input').value || '').trim().toLowerCase();
-  if(!q){
-    filtered = [...lecturers];
-  } else {
-    filtered = lecturers.filter(l=>{
-      const hay = (l.name + ' ' + (l.area||[]).join(' ') + ' ' + l.dept + ' ' + (l.title||'')).toLowerCase();
-      return hay.includes(q);
-    });
-  }
-  renderGrid(1);
-}
-
-// ============ MODAL DETAIL ============
-function openDetailByKey(key){
-  const lec = lecturers.find(x => x.key === key);
-  if(!lec) return;
-  const html = `
-    <div class="modal-profile">
-      <img src="${lec.img}" class="modal-img" alt="${lec.name}" />
-      <div class="modal-info">
-        <h2>${lec.name}</h2>
-        <p class="muted"><strong>${lec.title}</strong></p>
-        <p>${lec.dept}</p>
-        <p><strong>Phòng:</strong> ${lec.office || '(đang cập nhật)'}</p>
-        <p><strong>Email:</strong> ${lec.email || ''}</p>
-        ${lec.phone ? `<p><strong>Điện thoại:</strong> ${lec.phone}</p>` : ''}
-        <hr/>
-        <h4> Quá trình đào tạo</h4>
-        <ul>${(lec.train||[]).map(t => `<li>${t}</li>`).join('')}</ul>
-        <h4> Quá trình công tác</h4>
-        <ul>${(lec.work||[]).map(w => `<li>${w}</li>`).join('')}</ul>
-        ${lec.area ? `<h4> Lĩnh vực</h4><ul>${lec.area.map(a => `<li>${a}</li>`).join('')}</ul>` : ''}
-      </div>
-    </div>
+  pag.innerHTML = `
+    <button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
+      ◀
+    </button>
   `;
-  document.getElementById('modal-content').innerHTML = html;
-  document.getElementById('modal-bg').style.display = 'block';
-  document.getElementById('modal-box').style.display = 'block';
-  // prevent background scroll
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  document.getElementById('modal-bg').style.display = 'none';
-  document.getElementById('modal-box').style.display = 'none';
-  document.body.style.overflow = '';
-}
-// ======================================================
-// ================= CHATBOT MINI (CLEAN) ===============
-// ======================================================
 
-// Toggle hiển thị chatbot
-function toggleChatbot() {
-    const box = document.getElementById('chatbot-box');
-    box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+  for (let i = 1; i <= totalPages; i++) {
+    pag.innerHTML += `
+      <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">
+        ${i}
+      </button>
+    `;
+  }
+
+  pag.innerHTML += `
+    <button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>
+      ▶
+    </button>
+  `;
 }
 
-function escapeHtml(s){
-  return s.replaceAll('&','&amp;')
-          .replaceAll('<','&lt;')
-          .replaceAll('>','&gt;');
+function goPage(p) {
+  const totalPages = Math.ceil(lecturers.length / itemsPerPage);
+  if (p < 1 || p > totalPages) return;
+  currentPage = p;
+  renderLecturers();
 }
 
-// Thay markdown **text** bằng <strong>text</strong>
-function formatMarkdown(txt) {
-    return txt.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+// ====================== MODAL DETAILS =====================
+function attachCardEvents() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.onclick = () => {
+      const key = card.getAttribute("data-key");
+      const lec = lecturers.find(l => l.key === key);
+
+      document.getElementById("modalImg").src = lec.img;
+      document.getElementById("modalName").textContent = lec.name;
+      document.getElementById("modalTitle").textContent = lec.title;
+      document.getElementById("modalDept").textContent = lec.department;
+
+      // skills
+      const skills = document.getElementById("modalSkills");
+      skills.innerHTML = "";
+      lec.skills.forEach(s => skills.innerHTML += `<li>${s}</li>`);
+
+      // courses
+      const courses = document.getElementById("modalCourses");
+      courses.innerHTML = "";
+      lec.courses.forEach(c => courses.innerHTML += `<li>${c}</li>`);
+
+      document.getElementById("modalBg").style.display = "block";
+      document.getElementById("modalBox").style.display = "block";
+    };
+  });
 }
 
-// Thêm tin nhắn vào khung chat
-function addMessage(text, sender) {
-    const box = document.getElementById("chatbot-messages");
-    const html = formatMarkdown(text);
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("modalBg").style.display = "none";
+  document.getElementById("modalBox").style.display = "none";
+};
 
-    if (sender === "error") {
-        box.innerHTML += `<div class="msg error">❌ ${html}</div>`;
-    } else {
-        box.innerHTML += `<div class="msg ${sender}">${html}</div>`;
-    }
-    box.scrollTop = box.scrollHeight;
-}
 
-// ======================================================
-// =========== DỮ LIỆU 2 NGÀNH HỌC (ĐÃ SỬA) ============
-// ======================================================
-const programData = [
-    {
-        key: 'cngd',
-        name: 'Công nghệ Giáo dục',
-        info: `🎓 **Công nghệ Giáo dục (CNGD)**: Chương trình đào tạo nhân lực chất lượng cao về thiết kế đa phương tiện, VR/AR, game giáo dục, phát triển e-learning và các giải pháp chuyển đổi số trong giáo dục.`,
-        career: `💼 **Cơ hội nghề nghiệp CNGD**: Thiết kế nội dung số, AR/VR, quản trị hệ thống LMS, BA mảng giáo dục, phát triển học liệu STEM.`,
-        admissions: `📝 **Hình thức xét tuyển CNGD**: Tài năng, Kỳ thi đánh giá tư duy (K00), điểm thi THPT (A00, A01, D01, K01).`
-    },
-    {
-        key: 'qlgd',
-        name: 'Quản lý Giáo dục',
-        info: `💼 **Quản lý Giáo dục (QLGD)**: Đào tạo chuyên môn quản lý, đánh giá chất lượng giáo dục, chuyển đổi số trong quản trị giáo dục.`,
-        career: `🤝 **Cơ hội nghề nghiệp QLGD**: Chuyên viên quản lý, khảo thí, kiểm định chất lượng, nhân sự – tuyển sinh, chuyển đổi số giáo dục.`,
-        admissions: `📝 **Hình thức xét tuyển QLGD**: Tài năng, Kỳ thi đánh giá tư duy (K00), điểm thi THPT (A00, A01, D01, K01).`
-    }
-];
+// ====================== CHATBOT =========================
+const toggleChat = document.getElementById("toggleChat");
+const chatBox = document.getElementById("chatBox");
+toggleChat.onclick = () => {
+  chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+};
 
-// ======================================================
-// ================= XỬ LÝ NỘI DUNG TIN NHẮN ============
-// ======================================================
-function processMessage(msg) {
-    const q = msg.toLowerCase();
 
-    const isCNGD = q.includes('công nghệ giáo dục') || q.includes('cngd');
-    const isQLGD = q.includes('quản lý giáo dục') || q.includes('qlgd');
-    const isCareer = q.includes('cơ hội') || q.includes('việc làm') || q.includes('nghề');
-    const isAdmissions = q.includes('xét tuyển') || q.includes('tổ hợp') || q.includes('mã');
-
-    let response = "";
-
-    // Cả hai ngành
-    if (isCNGD && isQLGD) {
-        if (isCareer) {
-            response = `**Cơ hội nghề nghiệp của hai ngành:**<br><br>${programData[0].career}<br><br>${programData[1].career}`;
-        } else if (isAdmissions) {
-            response = `**Hình thức xét tuyển của hai ngành giống nhau:**<br><br>${programData[0].admissions}`;
-        } else {
-            response = `${programData[0].info}<br><br>${programData[1].info}<br><br>Bạn muốn hỏi về Cơ hội nghề nghiệp hay Xét tuyển?`;
-        }
-    }
-
-    // CNGD
-    else if (isCNGD) {
-        if (isCareer) response = programData[0].career;
-        else if (isAdmissions) response = programData[0].admissions;
-        else response = programData[0].info;
-    }
-
-    // QLGD
-    else if (isQLGD) {
-        if (isCareer) response = programData[1].career;
-        else if (isAdmissions) response = programData[1].admissions;
-        else response = programData[1].info;
-    }
-
-    // Chào hỏi
-    else if (q.includes('chào') || q.includes('hello')) {
-        response = `Chào bạn! Tôi có thể giúp bạn tìm hiểu về 2 ngành **Công nghệ Giáo dục** và **Quản lý Giáo dục**.`;
-    }
-
-    // Lỗi server mô phỏng
-    else if (q.includes('vũ đình minh')) {
-        return '❌ Lỗi kết nối server chatbot!';
-    }
-
-    // Không hiểu
-    else {
-        response = `Xin lỗi, tôi chưa hiểu rõ câu hỏi. Bạn có thể hỏi về **Cơ hội nghề nghiệp** hoặc **Xét tuyển** của 2 ngành CNGD / QLGD.`;
-    }
-
-    return response.trim();
-}
-
-// ======================================================
-// ================= GỬI TIN NHẮN =======================
-// ======================================================
-async function sendChat() {
-    const input = document.getElementById("chatbot-input");
-    const msg = input.value.trim();
-    if (!msg) return;
-
-    addMessage(msg, "user");
-    input.value = "";
-
-    await new Promise(r => setTimeout(r, 400));
-
-    const reply = processMessage(msg);
-
-    if (reply.startsWith("❌")) {
-        addMessage(reply.replace("❌ ", ""), "error");
-    } else {
-        addMessage(reply, "bot");
-    }
-}
-
+// ====================== INIT =============================
+renderLecturers();
