@@ -10,6 +10,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
 
     <style>
+        /* ===== GRID LECTURERS ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.card .name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 12px;
+    color: #003a8c;
+}
+
+.card .title {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.card .desc {
+    background: #eaf3ff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: #003a8c;
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 14px;
+    margin: 0 5px;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
         /* ------------ CHATBOT CSS  ------------ */
 
         .chatbot-widget {
