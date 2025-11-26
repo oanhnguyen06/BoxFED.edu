@@ -1,170 +1,82 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BK Lecturer Store</title>
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <style>
-        body {
-            background: #f8fafc;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        /* HEADER */
-        .navbar-brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: #003c96 !important;
-        }
-        .nav-link {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* LECTURER CARD */
-        .lecturer-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            transition: 0.2s;
-            text-align: center;
-        }
-        .lecturer-card:hover {
-            transform: translateY(-4px);
-        }
-        .lecturer-card img {
-            width: 100%;
-            border-radius: 12px;
-            height: 260px;
-            object-fit: cover;
-        }
-
-        /* PAGINATION */
-        .pagination button {
-            padding: 6px 14px;
-            border-radius: 8px;
-            margin: 0 4px;
-            border: none;
-            background: #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-        .pagination .active {
-            background: #0d6efd;
-            color: #fff;
-        }
-
-        /* CHATBOT */
-        #chatbox-container {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 350px;
-            z-index: 999;
-        }
-
-        #chat-window {
-            display: none;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
-            padding: 15px;
-        }
-
-        #chat-messages {
-            height: 280px;
-            overflow-y: auto;
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 10px;
-        }
-
-        .chat-btn {
-            background: #0d6efd;
-            color: #fff;
-            font-weight: 600;
-            border-radius: 20px;
-            padding: 7px 16px;
-            cursor: pointer;
-            border: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BK Lecturer Store</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm px-4 py-2">
-    <a class="navbar-brand" href="#">
-        <img src="logo.png" style="height: 32px; margin-right: 6px;">
-        BK LECTURER STORE
-    </a>
-
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-4">
-            <li class="nav-item"><a class="nav-link active" href="#">Trang chủ</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Giảng viên</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Review</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Chatbot</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
-        </ul>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="logo-zone">
+      <img src="img/logo.png" class="logo">
+      <div class="brand">BK LECTURER STORE</div>
     </div>
 
-    <div class="d-flex align-items-center" style="width: 300px;">
-        <input id="searchInput" class="form-control" placeholder="Tìm giảng viên theo tên / lĩnh vực...">
-        <button class="btn btn-primary ms-2" onclick="searchLecturers()">
-            🔍
-        </button>
+    <nav class="main-nav">
+      <a href="#" class="active">Trang chủ</a>
+      <a href="#">Giảng viên</a>
+      <a href="#">Review</a>
+      <a href="#">Chatbot</a>
+      <a href="#">Liên hệ</a>
+    </nav>
+
+    <div class="search-bar">
+      <input id="searchBox" type="text" placeholder="Tìm giảng viên theo tên / lĩnh vực...">
+      <button id="btnSearch">🔍</button>
     </div>
-</nav>
+  </header>
 
+  <!-- MAIN -->
+  <div class="container">
+    <div class="hero">
+      <h1>Danh sách giảng viên — Khoa KH&CN Giáo dục</h1>
+      <p class="lead">Click vào ảnh hoặc tên để xem chi tiết. Phân trang hiển thị 4 giảng viên / trang.</p>
+    </div>
 
-<!-- ================= MAIN CONTENT ================= -->
-<div class="container mt-4 mb-5">
-
-    <h2 class="fw-bold text-primary">Danh sách giảng viên — Khoa KH&CN Giáo dục</h2>
-    <p class="text-secondary">Click vào ảnh hoặc tên để xem chi tiết. Phân trang hiển thị 4 giảng viên / trang.</p>
-
-    <!-- LIST -->
-    <div id="lecturers" class="row g-4 mt-3"></div>
+    <!-- GRID RENDER CARD -->
+    <div id="lecturerGrid" class="grid"></div>
 
     <!-- PAGINATION -->
-    <div class="d-flex justify-content-center mt-4">
-        <div id="pagination" class="pagination"></div>
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modalBg" class="modal-bg" style="display:none"></div>
+  <div id="modalBox" class="modal" style="display:none">
+    <button class="modal-close" id="closeModal">×</button>
+    <div class="modal-profile">
+      <img id="modalImg" class="modal-img">
+      <div class="modal-info">
+        <h2 id="modalName"></h2>
+        <p id="modalTitle"></p>
+        <p id="modalDept"></p>
+        <h3>Chuyên môn</h3>
+        <ul id="modalSkills"></ul>
+        <h3>Môn giảng dạy</h3>
+        <ul id="modalCourses"></ul>
+      </div>
     </div>
-</div>
+  </div>
 
+  <!-- CHATBOT -->
+  <div class="chatbot-widget">
+    <button class="chatbot-toggle" id="toggleChat">🤖 Trợ lý</button>
 
-<!-- ================= CHATBOT ================= -->
-<div id="chatbox-container">
-    <button class="chat-btn w-100" onclick="toggleChat()">🤖 Trợ lý</button>
-
-    <div id="chat-window" class="mt-2">
-        <h6 class="fw-bold text-primary">Chatbot Tâm sự Giảng Viên</h6>
-
-        <div id="chat-messages"></div>
-
-        <div class="input-group mt-2">
-            <input id="chatInput" class="form-control" placeholder="Nhập tin nhắn...">
-            <button class="btn btn-primary" onclick="sendMessage()">Gửi</button>
-        </div>
+    <div class="chatbot-box" id="chatBox" style="display:none">
+      <div class="chatbot-head">Chatbot Tâm sự Giảng Viên</div>
+      <div class="chatbot-messages" id="chatMessages"></div>
+      <div class="chatbot-action">
+        <input type="text" id="chatInput" placeholder="Nhập tin nhắn...">
+        <button id="chatSend">Gửi</button>
+      </div>
     </div>
-</div>
+  </div>
 
-
-<!-- ================= JS ================= -->
-<script src="app.js"></script>
-
-<script>
-function toggleChat() {
-    let box = document.getElementById("chat-window");
-    box.style.display = box.style.display === "block" ? "none" : "block";
-}
-</script>
-
+  <!-- JS -->
+  <script src="app.js"></script>
 </body>
 </html>
