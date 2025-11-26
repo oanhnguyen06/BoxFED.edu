@@ -699,7 +699,7 @@ function renderLecturers() {
         <div class="card-body">
           <h3 class="card-name"><a>${l.name}</a></h3>
           <p class="card-title">${l.title}</p>
-          <p class="card-dept">${l.department}</p>
+          <p class="card-dept">${l.dept}</p>
         </div>
       </div>
     `;
@@ -709,30 +709,23 @@ function renderLecturers() {
   renderPagination();
 }
 
-
 // ====================== PAGINATION BUTTONS ==============
 function renderPagination() {
   const totalPages = Math.ceil(lecturers.length / itemsPerPage);
   const pag = document.getElementById("pagination");
 
   pag.innerHTML = `
-    <button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
-      ◀
-    </button>
+    <button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>◀</button>
   `;
 
   for (let i = 1; i <= totalPages; i++) {
     pag.innerHTML += `
-      <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">
-        ${i}
-      </button>
+      <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>
     `;
   }
 
   pag.innerHTML += `
-    <button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>
-      ▶
-    </button>
+    <button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>▶</button>
   `;
 }
 
@@ -742,7 +735,6 @@ function goPage(p) {
   currentPage = p;
   renderLecturers();
 }
-
 
 // ====================== MODAL DETAILS =====================
 function attachCardEvents() {
@@ -754,15 +746,17 @@ function attachCardEvents() {
       document.getElementById("modalImg").src = lec.img;
       document.getElementById("modalName").textContent = lec.name;
       document.getElementById("modalTitle").textContent = lec.title;
-      document.getElementById("modalDept").textContent = lec.department;
+      document.getElementById("modalDept").textContent = lec.dept;
 
+      // --- CHUYÊN MÔN (area) ---
       const skills = document.getElementById("modalSkills");
       skills.innerHTML = "";
-      lec.skills.forEach(s => skills.innerHTML += `<li>${s}</li>`);
+      lec.area?.forEach(s => skills.innerHTML += `<li>${s}</li>`);
 
+      // --- MÔN HỌC GIẢNG DẠY (teach) ---
       const courses = document.getElementById("modalCourses");
       courses.innerHTML = "";
-      lec.courses.forEach(c => courses.innerHTML += `<li>${c}</li>`);
+      lec.teach?.forEach(c => courses.innerHTML += `<li>${c}</li>`);
 
       document.getElementById("modalBg").style.display = "block";
       document.getElementById("modalBox").style.display = "block";
@@ -774,7 +768,6 @@ document.getElementById("closeModal").onclick = () => {
   document.getElementById("modalBg").style.display = "none";
   document.getElementById("modalBox").style.display = "none";
 };
-
 
 // ====================== SEARCH ===========================
 document.getElementById("btnSearch").onclick = () => {
@@ -789,7 +782,7 @@ document.getElementById("btnSearch").onclick = () => {
   const filtered = lecturers.filter(l =>
     l.name.toLowerCase().includes(q) ||
     l.title.toLowerCase().includes(q) ||
-    l.department.toLowerCase().includes(q)
+    l.dept.toLowerCase().includes(q)
   );
 
   const grid = document.getElementById("lecturerGrid");
@@ -803,21 +796,20 @@ document.getElementById("btnSearch").onclick = () => {
 
   filtered.forEach(l => {
     grid.innerHTML += `
-    <div class="card" data-key="${l.key}">
-      <div class="card-top"><img src="${l.img}" class="card-img"></div>
-      <div class="card-body">
-        <h3 class="card-name"><a>${l.name}</a></h3>
-        <p class="card-title">${l.title}</p>
-        <p class="card-dept">${l.department}</p>
+      <div class="card" data-key="${l.key}">
+        <div class="card-top"><img src="${l.img}" class="card-img"></div>
+        <div class="card-body">
+          <h3 class="card-name"><a>${l.name}</a></h3>
+          <p class="card-title">${l.title}</p>
+          <p class="card-dept">${l.dept}</p>
+        </div>
       </div>
-    </div>
     `;
   });
 
   attachCardEvents();
   document.getElementById("pagination").innerHTML = "";
 };
-
 
 // ====================== CHATBOT =========================
 const toggleChat = document.getElementById("toggleChat");
@@ -844,6 +836,6 @@ chatSend.onclick = () => {
   }, 500);
 };
 
-
 // ====================== INIT =============================
 renderLecturers();
+
