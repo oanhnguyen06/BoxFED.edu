@@ -756,12 +756,10 @@ function attachCardEvents() {
       document.getElementById("modalTitle").textContent = lec.title;
       document.getElementById("modalDept").textContent = lec.department;
 
-      // skills
       const skills = document.getElementById("modalSkills");
       skills.innerHTML = "";
       lec.skills.forEach(s => skills.innerHTML += `<li>${s}</li>`);
 
-      // courses
       const courses = document.getElementById("modalCourses");
       courses.innerHTML = "";
       lec.courses.forEach(c => courses.innerHTML += `<li>${c}</li>`);
@@ -778,11 +776,72 @@ document.getElementById("closeModal").onclick = () => {
 };
 
 
+// ====================== SEARCH ===========================
+document.getElementById("btnSearch").onclick = () => {
+  const q = document.getElementById("searchBox").value.toLowerCase().trim();
+
+  if (!q) {
+    currentPage = 1;
+    renderLecturers();
+    return;
+  }
+
+  const filtered = lecturers.filter(l =>
+    l.name.toLowerCase().includes(q) ||
+    l.title.toLowerCase().includes(q) ||
+    l.department.toLowerCase().includes(q)
+  );
+
+  const grid = document.getElementById("lecturerGrid");
+  grid.innerHTML = "";
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty">Không tìm thấy giảng viên nào…</div>`;
+    document.getElementById("pagination").innerHTML = "";
+    return;
+  }
+
+  filtered.forEach(l => {
+    grid.innerHTML += `
+    <div class="card" data-key="${l.key}">
+      <div class="card-top"><img src="${l.img}" class="card-img"></div>
+      <div class="card-body">
+        <h3 class="card-name"><a>${l.name}</a></h3>
+        <p class="card-title">${l.title}</p>
+        <p class="card-dept">${l.department}</p>
+      </div>
+    </div>
+    `;
+  });
+
+  attachCardEvents();
+  document.getElementById("pagination").innerHTML = "";
+};
+
+
 // ====================== CHATBOT =========================
 const toggleChat = document.getElementById("toggleChat");
 const chatBox = document.getElementById("chatBox");
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const chatSend = document.getElementById("chatSend");
+
 toggleChat.onclick = () => {
   chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+};
+
+chatSend.onclick = () => {
+  let text = chatInput.value.trim();
+  if (!text) return;
+
+  chatMessages.innerHTML += `<div class="msg user">${text}</div>`;
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  chatInput.value = "";
+
+  setTimeout(() => {
+    chatMessages.innerHTML += `<div class="msg bot">Mình đang xử lý: "${text}".</div>`;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }, 500);
 };
 
 
