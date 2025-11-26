@@ -798,22 +798,13 @@ function closeModal(){
   document.body.style.overflow = '';
 }
 // ======================================================
-// ================= CHATBOT MINI ========================
+// ================= CHATBOT MINI (CLEAN) ===============
 // ======================================================
-function toggleChatbot(){
-  const box = document.getElementById('chatbot-box');
-  box.style.display = box.style.display === 'block' ? 'none' : 'block';
-}
 
-function searchLecturerByText(text){
-  const q = text.toLowerCase();
-  let found = lecturers.find(l => l.key === q);
-  if(found) return found;
-  found = lecturers.find(
-      l => l.name.toLowerCase().includes(q)
-            || (l.area||[]).some(a => a.toLowerCase().includes(q))
-  );
-  return found || null;
+// Toggle hiển thị chatbot
+function toggleChatbot() {
+    const box = document.getElementById('chatbot-box');
+    box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
 }
 
 function escapeHtml(s){
@@ -822,126 +813,119 @@ function escapeHtml(s){
           .replaceAll('>','&gt;');
 }
 
- // Dữ liệu mô phỏng cho 2 ngành học dựa trên các file đã cung cấp
-        const programData = [
-            {
-                key: 'cngd',
-                name: 'Công nghệ Giáo dục',
-                [cite_start]info: '🎓 **Công nghệ Giáo dục (CNGD)**: Chương trình đào tạo nhân lực chất lượng cao về thiết kế, phát triển đa phương tiện (VR/AR, game giáo dục), phần mềm giáo dục, nội dung dạy học số (e-learning) và các giải pháp chuyển đổi số trong giáo dục. [cite: 14, 15, 16, 20]',
-                [cite_start]career: '💼 **Cơ hội nghề nghiệp CNGD**: Chuyên viên Thiết kế/Sáng tạo nội dung số (video, AR/VR, game giáo dục) [cite: 26][cite_start], Chuyên viên Quản trị hệ thống LMS/LCMS [cite: 25][cite_start], Chuyên viên Phân tích Nghiệp vụ (Business Analyst) cho sản phẩm giáo dục [cite: 24][cite_start], Phụ trách công tác đào tạo trong doanh nghiệp [cite: 31][cite_start], Chuyên viên thiết kế học liệu STEAM/STEM[cite: 28].',
-                [cite_start]admissions: '📝 **Hình thức xét tuyển CNGD**: Xét tuyển Tài năng, Xét tuyển theo Kết quả Kỳ thi đánh giá tư duy (**K00**), Xét tuyển theo điểm thi tốt nghiệp THPT (**A00, A01, D01, K01**). [cite: 33]'
-            },
-            {
-                key: 'qlgd',
-                name: 'Quản lý Giáo dục',
-                [cite_start]info: '💼 **Quản lý Giáo dục (QLGD)**: Chương trình đào tạo nguồn nhân lực chuyên nghiệp có kiến thức vững vàng về khoa học quản lý giáo dục, kết hợp với kỹ năng số, phương thức quản lý, đo lường và đánh giá chất lượng hiện đại trong kỷ nguyên số. [cite: 69, 73]',
-                [cite_start]career: '🤝 **Cơ hội nghề nghiệp QLGD**: Chuyên viên quản lý hành chính giáo dục tại cơ quan quản lý giáo dục (Bộ, Sở, Tổng Cục) [cite: 82][cite_start], Chuyên viên Khảo thí/Kiểm định chất lượng/Thanh tra giáo dục [cite: 87][cite_start], Chuyên viên Quản lý Nhân sự/Tuyển sinh/Chuyển đổi số tại các cơ sở giáo dục [cite: 86][cite_start], Khởi nghiệp cung ứng các dịch vụ giáo dục[cite: 92].',
-                [cite_start]admissions: '📝 **Hình thức xét tuyển QLGD**: Xét tuyển Tài năng, Xét tuyển theo Kết quả Kỳ thi đánh giá tư duy (**K00**), Xét tuyển theo điểm thi tốt nghiệp THPT (**A00, A01, D01, K01**). [cite: 95]'
-            }
-        ];
+// Thay markdown **text** bằng <strong>text</strong>
+function formatMarkdown(txt) {
+    return txt.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+}
 
-        // ---------------- Chức năng giao diện ----------------
-        function toggleChatbot() {
-            const box = document.getElementById('chatbot-box');
-            box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
-        }
+// Thêm tin nhắn vào khung chat
+function addMessage(text, sender) {
+    const box = document.getElementById("chatbot-messages");
+    const html = formatMarkdown(text);
 
-        function addMessage(text, sender) {
-            const box = document.getElementById("chatbot-messages");
-            // Thay thế markdown đơn giản bằng HTML (VD: **text** -> <strong>text</strong>)
-            let formattedText = text.replaceAll('**', '<strong>');
-            
-            // Xử lý thông báo lỗi riêng
-            if (sender === "error") {
-                box.innerHTML += `<div class="msg error">❌ ${formattedText}</div>`;
-            } else {
-                box.innerHTML += `<div class="msg ${sender}">${formattedText}</div>`;
-            }
-            
-            box.scrollTop = box.scrollHeight;
-        }
+    if (sender === "error") {
+        box.innerHTML += `<div class="msg error">❌ ${html}</div>`;
+    } else {
+        box.innerHTML += `<div class="msg ${sender}">${html}</div>`;
+    }
+    box.scrollTop = box.scrollHeight;
+}
 
-        // ---------------- Logic xử lý tin nhắn (thay thế API Ollama) ----------------
-        function processMessage(msg) {
-            const q = msg.toLowerCase();
-            
-            // Tìm kiếm thông tin liên quan đến 2 ngành
-            const isCNGD = q.includes('công nghệ giáo dục') || q.includes('cngd');
-            const isQLGD = q.includes('quản lý giáo dục') || q.includes('qlgd');
-            const isCareer = q.includes('cơ hội nghề nghiệp') || q.includes('ra trường làm gì') || q.includes('việc làm') || q.includes('nghề nghiệp');
-            const isAdmissions = q.includes('xét tuyển') || q.includes('tổ hợp') || q.includes('mã');
-            
-            let response = '';
-
-            if (isCNGD && isQLGD) {
-                // Hỏi cả hai ngành
-                if (isCareer) {
-                     response = '**Cơ hội nghề nghiệp của hai ngành có sự khác biệt rõ rệt:**<br><br>' + 
-                                programData[0].career + '<br><br>' + 
-                                programData[1].career;
-                } else if (isAdmissions) {
-                     response = '**Hình thức xét tuyển của hai ngành giống nhau:**<br><br>' + programData[0].admissions;
-                } else {
-                    response = programData[0].info + '<br><br>' + programData[1].info + '<br><br>Bạn muốn so sánh Cơ hội nghề nghiệp hay Hình thức xét tuyển?';
-                }
-            } else if (isCNGD) {
-                // Hỏi về CNGD
-                if (isCareer) {
-                    response = programData[0].career;
-                } else if (isAdmissions) {
-                    response = programData[0].admissions;
-                } else {
-                    response = programData[0].info;
-                }
-            } else if (isQLGD) {
-                // Hỏi về QLGD
-                if (isCareer) {
-                    response = programData[1].career;
-                } else if (isAdmissions) {
-                    response = programData[1].admissions;
-                } else {
-                    response = programData[1].info;
-                }
-            } else if (q.includes('chào') || q.includes('hello')) {
-                response = 'Chào bạn! Tôi có thể giúp bạn tìm hiểu về 2 ngành học: **Công nghệ Giáo dục (CNGD)** và **Quản lý Giáo dục (QLGD)**.';
-            } else if (q.includes('vũ đình minh')) {
-                // Mô phỏng lỗi server theo yêu cầu từ ảnh
-                return '❌ Lỗi kết nối server chatbot!';
-            } else {
-                // Trả lời mặc định
-                response = 'Xin lỗi, tôi chưa hiểu rõ câu hỏi của bạn. Vui lòng hỏi chi tiết về **Công nghệ Giáo dục** hoặc **Quản lý Giáo dục** (ví dụ: "Cơ hội nghề nghiệp ngành QLGD" hoặc "Xét tuyển CNGD").';
-            }
-
-            // Dọn dẹp khoảng trắng và xuống dòng
-            return response.trim().replaceAll('\n\n', '<br><br>').replaceAll('\n', '<br>');
-        }
-
-        // ---------------- Chức năng gửi tin nhắn  ----------------
-        async function sendChat() {
-            const input = document.getElementById("chatbot-input");
-            const msg = input.value.trim();
-            if (!msg) return;
-
-            addMessage(msg, "user");
-            input.value = ""; // Xóa input
-
-            // Mô phỏng độ trễ
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-
-            const botReply = processMessage(msg);
-            
-            if (botReply.startsWith('❌')) {
-                // Xử lý tin nhắn lỗi
-                addMessage(botReply.replace('❌ ', ''), "error");
-            } else {
-                // Xử lý tin nhắn hợp lệ
-                addMessage(botReply, "bot");
-            }
-        }
 // ======================================================
-// ===================== KHỞI TẠO ========================
+// =========== DỮ LIỆU 2 NGÀNH HỌC (ĐÃ SỬA) ============
 // ======================================================
-document.addEventListener("DOMContentLoaded", ()=>{
-    filtered = [...lecturers];
-    renderGrid(1);
-});
+const programData = [
+    {
+        key: 'cngd',
+        name: 'Công nghệ Giáo dục',
+        info: `🎓 **Công nghệ Giáo dục (CNGD)**: Chương trình đào tạo nhân lực chất lượng cao về thiết kế đa phương tiện, VR/AR, game giáo dục, phát triển e-learning và các giải pháp chuyển đổi số trong giáo dục.`,
+        career: `💼 **Cơ hội nghề nghiệp CNGD**: Thiết kế nội dung số, AR/VR, quản trị hệ thống LMS, BA mảng giáo dục, phát triển học liệu STEM.`,
+        admissions: `📝 **Hình thức xét tuyển CNGD**: Tài năng, Kỳ thi đánh giá tư duy (K00), điểm thi THPT (A00, A01, D01, K01).`
+    },
+    {
+        key: 'qlgd',
+        name: 'Quản lý Giáo dục',
+        info: `💼 **Quản lý Giáo dục (QLGD)**: Đào tạo chuyên môn quản lý, đánh giá chất lượng giáo dục, chuyển đổi số trong quản trị giáo dục.`,
+        career: `🤝 **Cơ hội nghề nghiệp QLGD**: Chuyên viên quản lý, khảo thí, kiểm định chất lượng, nhân sự – tuyển sinh, chuyển đổi số giáo dục.`,
+        admissions: `📝 **Hình thức xét tuyển QLGD**: Tài năng, Kỳ thi đánh giá tư duy (K00), điểm thi THPT (A00, A01, D01, K01).`
+    }
+];
+
+// ======================================================
+// ================= XỬ LÝ NỘI DUNG TIN NHẮN ============
+// ======================================================
+function processMessage(msg) {
+    const q = msg.toLowerCase();
+
+    const isCNGD = q.includes('công nghệ giáo dục') || q.includes('cngd');
+    const isQLGD = q.includes('quản lý giáo dục') || q.includes('qlgd');
+    const isCareer = q.includes('cơ hội') || q.includes('việc làm') || q.includes('nghề');
+    const isAdmissions = q.includes('xét tuyển') || q.includes('tổ hợp') || q.includes('mã');
+
+    let response = "";
+
+    // Cả hai ngành
+    if (isCNGD && isQLGD) {
+        if (isCareer) {
+            response = `**Cơ hội nghề nghiệp của hai ngành:**<br><br>${programData[0].career}<br><br>${programData[1].career}`;
+        } else if (isAdmissions) {
+            response = `**Hình thức xét tuyển của hai ngành giống nhau:**<br><br>${programData[0].admissions}`;
+        } else {
+            response = `${programData[0].info}<br><br>${programData[1].info}<br><br>Bạn muốn hỏi về Cơ hội nghề nghiệp hay Xét tuyển?`;
+        }
+    }
+
+    // CNGD
+    else if (isCNGD) {
+        if (isCareer) response = programData[0].career;
+        else if (isAdmissions) response = programData[0].admissions;
+        else response = programData[0].info;
+    }
+
+    // QLGD
+    else if (isQLGD) {
+        if (isCareer) response = programData[1].career;
+        else if (isAdmissions) response = programData[1].admissions;
+        else response = programData[1].info;
+    }
+
+    // Chào hỏi
+    else if (q.includes('chào') || q.includes('hello')) {
+        response = `Chào bạn! Tôi có thể giúp bạn tìm hiểu về 2 ngành **Công nghệ Giáo dục** và **Quản lý Giáo dục**.`;
+    }
+
+    // Lỗi server mô phỏng
+    else if (q.includes('vũ đình minh')) {
+        return '❌ Lỗi kết nối server chatbot!';
+    }
+
+    // Không hiểu
+    else {
+        response = `Xin lỗi, tôi chưa hiểu rõ câu hỏi. Bạn có thể hỏi về **Cơ hội nghề nghiệp** hoặc **Xét tuyển** của 2 ngành CNGD / QLGD.`;
+    }
+
+    return response.trim();
+}
+
+// ======================================================
+// ================= GỬI TIN NHẮN =======================
+// ======================================================
+async function sendChat() {
+    const input = document.getElementById("chatbot-input");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    addMessage(msg, "user");
+    input.value = "";
+
+    await new Promise(r => setTimeout(r, 400));
+
+    const reply = processMessage(msg);
+
+    if (reply.startsWith("❌")) {
+        addMessage(reply.replace("❌ ", ""), "error");
+    } else {
+        addMessage(reply, "bot");
+    }
+}
+
