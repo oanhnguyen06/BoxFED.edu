@@ -903,7 +903,7 @@ toggleChat.onclick = () => {
 
   if (isClosed && !hasGreeted) {
     chatMessages.innerHTML = `
-      <div class="msg bot">Chào bạn 👋! Bạn muốn tìm hiểu ngành nào?</div>
+      <div class="msg bot">Chào bạn! Bạn cần tôi giúp gì không?</div>
     `;
     hasGreeted = true;
   }
