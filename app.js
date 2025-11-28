@@ -736,47 +736,71 @@ function goPage(p) {
   renderLecturers();
 }
 
-function openModal(lect) {
+function openLecturer(key) {
+  const lec = lecturers.find(l => l.key === key);
+  if (!lec) return;
 
-  document.getElementById("modalImg").src = lect.img;
-  document.getElementById("modalName").textContent = lect.name;
-  document.getElementById("modalTitle").textContent = lect.title;
-  document.getElementById("modalDept").textContent = lect.dept;
-
-  // CHUYÊN MÔN
-  fillList("modalArea", lect.area);
-
-  // ĐÀO TẠO
-  fillList("modalTrain", lect.train);
-
-  // KINH NGHIỆM LÀM VIỆC
-  fillList("modalWork", lect.work);
-
-  // Hiện modal
+  // mở modal
   document.getElementById("modalBg").style.display = "block";
   document.getElementById("modalBox").style.display = "block";
+
+  // thông tin chung
+  document.getElementById("modalImg").src = lec.img;
+  document.getElementById("modalName").textContent = lec.name;
+  document.getElementById("modalTitle").textContent = lec.title;
+  document.getElementById("modalDept").textContent = lec.dept;
+
+  // --- CHUYÊN MÔN ---
+  const areaList = document.getElementById("modalSkills");
+  areaList.innerHTML = "";
+  if (lec.area) {
+    lec.area.forEach(a => {
+      areaList.innerHTML += `<li>${a}</li>`;
+    });
+  }
+
+  // --- MÔN GIẢNG DẠY ---
+  const courseList = document.getElementById("modalCourses");
+  courseList.innerHTML = "";
+  if (lec.courses) {
+    lec.courses.forEach(c => {
+      courseList.innerHTML += `<li>${c}</li>`;
+    });
+  }
+
+  // --- THÔNG TIN CÁ NHÂN (email - phone - office) ---
+  const infoBox = document.getElementById("modalInfoExtra");
+  if (infoBox) {
+    infoBox.innerHTML = `
+      <p><strong>Email:</strong> ${lec.email || "(đang cập nhật)"} </p>
+      <p><strong>Điện thoại:</strong> ${lec.phone || "(đang cập nhật)"} </p>
+      <p><strong>Văn phòng:</strong> ${lec.office || "(đang cập nhật)"} </p>
+    `;
+  }
+
+  // --- QUÁ TRÌNH ĐÀO TẠO ---
+  const trainList = document.getElementById("modalTrain");
+  if (trainList) {
+    trainList.innerHTML = "";
+    if (lec.train) {
+      lec.train.forEach(t => {
+        trainList.innerHTML += `<li>${t}</li>`;
+      });
+    }
+  }
+
+  // --- QUÁ TRÌNH CÔNG TÁC ---
+  const workList = document.getElementById("modalWork");
+  if (workList) {
+    workList.innerHTML = "";
+    if (lec.work) {
+      lec.work.forEach(w => {
+        workList.innerHTML += `<li>${w}</li>`;
+      });
+    }
+  }
 }
 
-function fillList(id, arr) {
-  const ul = document.getElementById(id);
-  ul.innerHTML = "";
-  arr.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    ul.appendChild(li);
-  });
-}
-
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("modalBg").style.display = "none";
-  document.getElementById("modalBox").style.display = "none";
-};
-
-
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("modalBg").style.display = "none";
-  document.getElementById("modalBox").style.display = "none";
-};
 
 // ====================== SEARCH ===========================
 document.getElementById("btnSearch").onclick = () => {
