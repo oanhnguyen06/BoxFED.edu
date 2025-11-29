@@ -1,4 +1,3 @@
-
 :root{
   --blue:#176bd7;
   --brand:#1b2c6d;
@@ -11,7 +10,7 @@
 *{box-sizing:border-box}
 body{
   margin:0; font-family:Inter, "Poppins", Arial, sans-serif;
-  background:#f7f9fb; color:var(--brand);
+  background:var(--surface); color:var(--brand);
   -webkit-font-smoothing:antialiased;
 }
 a{color:inherit; text-decoration:none}
@@ -27,10 +26,17 @@ a{color:inherit; text-decoration:none}
 .logo{height:40px}
 .brand{font-weight:800; color:var(--brand); font-size:1.15rem}
 .main-nav{margin-left:24px; display:flex; gap:18px; align-items:center}
-.main-nav a{color:#47507a; font-weight:600; padding:6px 10px; border-radius:8px}
+.main-nav a{color:#47507a; font-weight:600; padding:6px 10px; border-radius:8px; transition: background .18s;}
 .main-nav a.active{background: #eaf2ff; color:var(--blue)}
+.main-nav a:hover{background:#f0f5ff; color:var(--blue)} /* Hover highlight */
+
+/* Search bar */
 .search-bar{margin-left:auto; display:flex; gap:8px; align-items:center}
-.search-bar input{padding:8px 12px; border-radius:20px; border:1.5px solid #e1e6f2; width:320px; background:#fff}
+.search-bar input{
+  padding:8px 12px; border-radius:20px; border:1.5px solid #e1e6f2;
+  width:320px; background:#fff; transition: border .18s;
+}
+.search-bar input:focus{ border-color:var(--blue); } /* Bôi xanh khi focus */
 .search-bar button{border:none; background:var(--blue); color:#fff; padding:8px 12px; border-radius:8px; cursor:pointer}
 
 /* MAIN */
@@ -52,20 +58,26 @@ a{color:inherit; text-decoration:none}
   box-shadow:0 6px 22px rgba(20,40,100,0.06);
   display:flex; flex-direction:column; align-items:center;
   min-height:300px;
+  cursor:pointer; /* Thêm pointer cho toàn bộ card */
   transition:transform .14s, box-shadow .14s;
 }
-.card:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(20,40,100,0.08) }
+.card:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(20,40,100,0.08); }
 
+/* Card top */
 .card-top{ width:100%; display:flex; justify-content:center; margin-bottom:12px; }
 .card-img{
-  width:160px; height:210px; object-fit:cover; border-radius:12px;
+  width:160px; height:200px; object-fit:cover; border-radius:12px; /* Giảm chiều cao tí cho khớp ảnh */
   background:#eef4fb; box-shadow:0 6px 20px rgba(100,120,200,0.06);
   cursor:pointer;
 }
 
+/* Card body */
 .card-body{text-align:center}
 .card-name{margin:6px 0 6px; font-size:1rem}
-.card-name a{color:var(--brand); font-weight:700}
+.card-name a{
+  color:var(--brand); font-weight:700; text-decoration:none; transition:color .18s;
+}
+.card-name a:hover{ text-decoration:underline; color:var(--blue);} /* underline hover tên */
 .card-title{color:var(--blue); font-weight:600; margin-bottom:6px}
 .card-dept{background:#eef5ff; color:var(--blue); padding:6px 10px; border-radius:8px; display:inline-block; font-size:0.9rem}
 
@@ -73,6 +85,7 @@ a{color:inherit; text-decoration:none}
 .pagination{display:flex; gap:8px; justify-content:center; margin:8px 0 50px}
 .page-btn{
   border:1px solid #e3e8f6; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer;
+  transition:background .15s, color .15s;
 }
 .page-btn.active{background:var(--blue); color:#fff; border-color:var(--blue)}
 .page-btn:disabled{opacity:0.5; cursor:not-allowed}
@@ -83,14 +96,21 @@ a{color:inherit; text-decoration:none}
 .modal{position:fixed; z-index:121; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; padding:22px; border-radius:12px; box-shadow:0 12px 40px rgba(20,40,100,0.18); width:min(920px,94vw); max-height:85vh; overflow:auto}
 .modal-close{position:absolute; right:18px; top:12px; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:var(--brand)}
 .modal-profile{display:flex; gap:18px}
-.modal-img{width:160px; height:220px; object-fit:cover; border-radius:10px; background:#eef4fb}
-.modal-info h2{margin:0 0 6px}
+.modal-img{width:160px; height:210px; object-fit:cover; border-radius:10px; background:#eef4fb}
+.modal-info h2{margin:0 0 6px; font-size:1.5rem;} /* Tăng font cho tên */
 .modal-info p{margin:6px 0; color:#344063}
 .modal-info ul{padding-left:18px; margin:8px 0 16px}
 
 /* chatbot */
 .chatbot-widget{position:fixed; right:24px; bottom:24px; z-index:200; display:flex; flex-direction:column; align-items:flex-end; gap:8px}
-.chatbot-toggle{background:var(--blue); color:#fff; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(23,107,215,0.18)}
+.chatbot-toggle{
+  background:var(--blue); color:#fff; border:none; padding:10px 20px; /* tăng rộng */
+  border-radius:20px; /* tăng bo cong */
+  cursor:pointer; box-shadow:0 6px 20px rgba(23,107,215,0.18);
+  display:flex; gap:8px; align-items:center; font-size:1.08rem; /* thêm gap và căn giữa icon, chữ */
+  font-weight:600;
+}
+/* Nên thêm icon robot bên trong HTML chứ không cần CSS riêng */
 .chatbot-box{width:320px; background:#fff; border-radius:10px; box-shadow:0 8px 30px rgba(20,40,100,0.15); overflow:hidden}
 .chatbot-head{background:var(--blue); color:#fff; padding:10px; font-weight:700}
 .chatbot-messages{max-height:180px; overflow:auto; padding:12px; background:#f6fbff}
@@ -100,9 +120,6 @@ a{color:inherit; text-decoration:none}
 .chatbot-action{display:flex; gap:8px; padding:10px; background:#eef6ff}
 .chatbot-action input{flex:1; padding:8px 10px; border-radius:8px; border:1px solid #dbeafe}
 .chatbot-action button{background:#0b63c8; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer}
-
-
-
 
 /* utilities */
 .empty{padding:36px; text-align:center; color:var(--muted)}
