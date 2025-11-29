@@ -835,8 +835,12 @@ document.getElementById("searchBox").addEventListener("keypress", function (e) {
   if (e.key === "Enter") document.getElementById("btnSearch").click();
 });
 
-// ===== CHATBOT: majors.json + lecturers =====
+// --- Chuẩn hoá tiếng Việt không dấu
+function removeUnicode(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
 
+// ===== CHATBOT NGÀNH HỌC + GIẢNG VIÊN =====
 let majors = {};
 fetch("majors.json")
   .then(res => res.json())
@@ -861,19 +865,22 @@ toggleChat.onclick = () => {
 chatSend.onclick = () => {
   let text = chatInput.value.trim();
   if (!text) return;
-
   chatMessages.innerHTML += `<div class="msg user">${text}</div>`;
   chatMessages.scrollTop = chatMessages.scrollHeight;
   chatInput.value = "";
 
   let reply = "Thông tin này không có trong chương trình đào tạo.";
 
-  const q = text.toLowerCase();
+  const qOrigin = text.toLowerCase();
+  const q = removeUnicode(qOrigin);
 
-  // 1. Tìm ngành học
+  // --- Tìm ngành học trong majors.json ---
   Object.keys(majors).forEach(key => {
     const nganh = majors[key];
-    if (q.includes(key) || (nganh.ten && q.includes(nganh.ten.toLowerCase()))) {
+    const keyNorm = removeUnicode(key);
+    const tenNorm = nganh.ten ? removeUnicode(nganh.ten) : "";
+    // Tìm theo mã hoặc tên ngành (không dấu)
+    if (q.includes(keyNorm) || (tenNorm && q.includes(tenNorm))) {
       reply =
         `<b>${nganh.ten}</b>:<br>${nganh.mo_ta}`;
       if (nganh.dinh_huong && Array.isArray(nganh.dinh_huong)) {
@@ -894,11 +901,11 @@ chatSend.onclick = () => {
     }
   });
 
-  // 2. Tìm thông tin giảng viên nếu chưa khớp ngành
+  // --- Tìm thông tin giảng viên nếu chưa match ngành ---
   if (reply === "Thông tin này không có trong chương trình đào tạo.") {
     const foundLecturer = lecturers.find(l =>
-      (l.name && q.includes(l.name.toLowerCase())) ||
-      (l.key && q.includes(l.key))
+      (l.name && q.includes(removeUnicode(l.name))) ||
+      (l.key && q.includes(removeUnicode(l.key)))
     );
     if (foundLecturer) {
       reply = `<b>${foundLecturer.name}</b> (${foundLecturer.title})<br>
@@ -913,7 +920,6 @@ chatSend.onclick = () => {
   chatMessages.innerHTML += `<div class="msg bot">${reply}</div>`;
   chatMessages.scrollTop = chatMessages.scrollHeight;
 };
-
 chatInput.addEventListener("keypress", e => {
   if (e.key === "Enter") chatSend.click();
 });
