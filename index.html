@@ -6,16 +6,14 @@
   <title>BK Lecturer Store</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
   <!-- HEADER -->
   <header class="site-header">
     <div class="logo-zone">
-      <img src="img/logo-bk.png" class="logo">
+      <img src="img/logo-bk.png" class="logo" alt="Logo BK Lecturer Store">
       <div class="brand">BK LECTURER STORE</div>
     </div>
-
     <nav class="main-nav">
       <a href="#" class="active">Trang chủ</a>
       <a href="#">Giảng viên</a>
@@ -23,10 +21,11 @@
       <a href="#">Chatbot</a>
       <a href="#">Liên hệ</a>
     </nav>
-
     <div class="search-bar">
       <input id="searchBox" type="text" placeholder="Tìm giảng viên theo tên / lĩnh vực...">
-      <button id="btnSearch">🔍</button>
+      <button id="btnSearch" class="search-btn" title="Tìm kiếm">
+        <img src="img/icons/search-blue.svg" alt="search" class="icon-search" />
+      </button>
     </div>
   </header>
 
@@ -36,37 +35,45 @@
       <h1>Danh sách giảng viên — Khoa KH&CN Giáo dục</h1>
       <p class="lead">Click vào ảnh hoặc tên để xem chi tiết. Phân trang hiển thị 4 giảng viên / trang.</p>
     </div>
-
     <!-- GRID RENDER CARD -->
     <div id="lecturerGrid" class="grid"></div>
-
     <!-- PAGINATION -->
     <div id="pagination" class="pagination"></div>
   </div>
 
- <!-- MODAL -->
-<div id="modalBg" class="modal-bg" style="display:none"></div>
-<div id="modalBox" class="modal" style="display:none">
-  <button class="modal-close" id="closeModal">×</button>
-  <div class="modal-profile">
-    <img id="modalImg" class="modal-img">
-    <div class="modal-info">
-      <h2 id="modalName"></h2>
-      <p id="modalTitle"></p>
-      <p id="modalDept"></p>
-      <h3>Chuyên môn</h3>
-      <ul id="modalSkills"></ul>
-      <h3>Môn giảng dạy</h3>
-      <ul id="modalCourses"></ul>
+  <!-- MODAL GIẢNG VIÊN CHI TIẾT -->
+  <div id="modalBg" class="modal-bg" style="display:none" tabindex="0" role="button" aria-label="Đóng modal"></div>
+  <div id="modalBox" class="modal" style="display:none">
+    <button class="modal-close" id="closeModal">×</button>
+    <div class="modal-profile">
+      <img id="modalImg" class="modal-img" alt="Ảnh Giảng viên">
+      <div class="modal-info">
+        <h2 id="modalName"></h2>
+        <p id="modalTitle"></p>
+        <p id="modalDept"></p>
+        <div id="modalInfoExtra"></div>
+
+        <h3>Chuyên môn</h3>
+        <ul id="modalSkills"></ul>
+
+        <h3>Môn giảng dạy</h3>
+        <ul id="modalCourses"></ul>
+
+        <h3>Quá trình đào tạo</h3>
+        <ul id="modalTrain"></ul>
+
+        <h3>Quá trình công tác</h3>
+        <ul id="modalWork"></ul>
+      </div>
     </div>
   </div>
-</div>
 
-
-  <!-- CHATBOT -->
+  <!-- CHATBOT NÚT VÀ BOX -->
   <div class="chatbot-widget">
-    <button class="chatbot-toggle" id="toggleChat">🤖 Trợ lý</button>
-
+    <button class="chatbot-toggle" id="toggleChat">
+      <img src="img/icons/bot-white.svg" alt="" class="icon-bot" />
+      Trợ lý
+    </button>
     <div class="chatbot-box" id="chatBox" style="display:none">
       <div class="chatbot-head">BOXFED</div>
       <div class="chatbot-messages" id="chatMessages"></div>
