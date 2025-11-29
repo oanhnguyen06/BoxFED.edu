@@ -673,6 +673,7 @@ const lecturers = [
 // ================ END DATA =====================
 
 // ====================== PAGINATION =====================
+
 let currentPage = 1;
 const itemsPerPage = 4;
 
@@ -709,6 +710,16 @@ function renderLecturers() {
   renderPagination();
 }
 
+function attachCardEvents() {
+  document.querySelectorAll('.card').forEach(card => {
+    card.onclick = function() {
+      openLecturer(card.getAttribute('data-key'));
+    }
+    card.querySelector('.card-img').onclick = function(e){e.stopPropagation(); openLecturer(card.getAttribute('data-key'));}
+    card.querySelector('.card-name a').onclick = function(e){e.stopPropagation(); openLecturer(card.getAttribute('data-key'));}
+  });
+}
+
 // ====================== PAGINATION BUTTONS ==============
 function renderPagination() {
   const totalPages = Math.ceil(lecturers.length / itemsPerPage);
@@ -734,6 +745,7 @@ function goPage(p) {
   if (p < 1 || p > totalPages) return;
   currentPage = p;
   renderLecturers();
+  document.querySelector('.container').scrollIntoView({behavior: 'smooth'});
 }
 
 function openLecturer(key) {
@@ -762,8 +774,9 @@ function openLecturer(key) {
   // --- MÔN GIẢNG DẠY ---
   const courseList = document.getElementById("modalCourses");
   courseList.innerHTML = "";
-  if (lec.courses) {
-    lec.courses.forEach(c => {
+  const courses = lec.courses || lec.teach;
+  if (courses) {
+    courses.forEach(c => {
       courseList.innerHTML += `<li>${c}</li>`;
     });
   }
@@ -780,29 +793,32 @@ function openLecturer(key) {
 
   // --- QUÁ TRÌNH ĐÀO TẠO ---
   const trainList = document.getElementById("modalTrain");
-  if (trainList) {
-    trainList.innerHTML = "";
-    if (lec.train) {
-      lec.train.forEach(t => {
-        trainList.innerHTML += `<li>${t}</li>`;
-      });
-    }
+  trainList.innerHTML = "";
+  if (lec.train) {
+    lec.train.forEach(t => {
+      trainList.innerHTML += `<li>${t}</li>`;
+    });
   }
 
   // --- QUÁ TRÌNH CÔNG TÁC ---
   const workList = document.getElementById("modalWork");
-  if (workList) {
-    workList.innerHTML = "";
-    if (lec.work) {
-      lec.work.forEach(w => {
-        workList.innerHTML += `<li>${w}</li>`;
-      });
-    }
+  workList.innerHTML = "";
+  if (lec.work) {
+    lec.work.forEach(w => {
+      workList.innerHTML += `<li>${w}</li>`;
+    });
   }
 }
 
+// Đóng modal khi click X hoặc nền
+document.getElementById("closeModal").onclick = closeModal;
+document.getElementById("modalBg").onclick = closeModal;
+function closeModal() {
+  document.getElementById("modalBg").style.display = "none";
+  document.getElementById("modalBox").style.display = "none";
+}
 
-// ====================== SEARCH ===========================
+// Search
 document.getElementById("btnSearch").onclick = () => {
   const q = document.getElementById("searchBox").value.toLowerCase().trim();
 
@@ -843,103 +859,12 @@ document.getElementById("btnSearch").onclick = () => {
   attachCardEvents();
   document.getElementById("pagination").innerHTML = "";
 };
-
-// ====================== CHATBOT =========================
-
-// DOM
-const toggleChat = document.getElementById("toggleChat");
-const chatBox = document.getElementById("chatBox");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-const chatSend = document.getElementById("chatSend");
-
-let hasGreeted = false;
-let majors = {};   // dữ liệu ngành học từ JSON
-
-// --- Load dữ liệu ngành học ---
-fetch("majors.json")
-  .then(res => res.json())
-  .then(data => majors = data);
-
-// --- Tạo prompt cho AI dựa trên dữ liệu ngành ---
-function buildPrompt(userMessage) {
-  return `
-Bạn là trợ lý AI của Khoa Khoa học & Công nghệ Giáo dục – Đại học Bách khoa Hà Nội.
-Bạn CHỈ được dùng dữ liệu dưới đây để trả lời:
-
-${JSON.stringify(majors, null, 2)}
-
-YÊU CẦU:
-- Trả lời tự nhiên, ngắn gọn, thân thiện.
-- Chỉ trả lời dựa trên dữ liệu JSON trên.
-- Nếu câu hỏi nằm ngoài dữ liệu → trả lời: "Thông tin này không có trong chương trình đào tạo."
-
-Câu hỏi: "${userMessage}"
-  `;
-}
-
-// --- Gọi AI Ollama ---
-async function askAI(userMessage) {
-  const prompt = buildPrompt(userMessage);
-
-  const res = await fetch("http://localhost:11434/api/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "llama3",  // có thể đổi thành qwen2, mistral...
-      prompt: prompt,
-      stream: false
-    })
-  });
-
-  const data = await res.json();
-  return data.response || "Lỗi AI.";
-}
-
-// --- Toggle mở/đóng chatbot ---
-toggleChat.onclick = () => {
-  const isClosed = chatBox.style.display === "none";
-  chatBox.style.display = isClosed ? "block" : "none";
-
-  if (isClosed && !hasGreeted) {
-    chatMessages.innerHTML = `
-      <div class="msg bot">Chào bạn! Bạn cần tôi giúp gì không?</div>
-    `;
-    hasGreeted = true;
-  }
-};
-
-// --- Gửi tin nhắn ---
-chatSend.onclick = async () => {
-  let text = chatInput.value.trim();
-  if (!text) return;
-
-  // user message
-  chatMessages.innerHTML += `<div class="msg user">${text}</div>`;
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  chatInput.value = "";
-
-  // Loading...
-  chatMessages.innerHTML += `<div class="msg bot" id="typing">Đang trả lời...</div>`;
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-
-  // AI trả lời dựa trên ngành học
-  const botReply = await askAI(text);
-
-  // remove loading
-  document.getElementById("typing").remove();
-
-  // show bot answer
-  chatMessages.innerHTML += `<div class="msg bot">${botReply.replace(/\n/g, "<br>")}</div>`;
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-};
-
-// --- Enter để gửi ---
-chatInput.addEventListener("keypress", e => {
-  if (e.key === "Enter") chatSend.click();
+// Tìm kiếm với Enter
+document.getElementById("searchBox").addEventListener("keypress", function(e){
+  if(e.key === "Enter") document.getElementById("btnSearch").click();
 });
 
 
-// ====================== INIT =============================
+// ====================== KHỞI TẠO =========================
 renderLecturers();
 
