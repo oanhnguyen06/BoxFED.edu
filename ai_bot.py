@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# Tên File: server_rearranged.py (Phiên bản đã sắp xếp lại)
 
 import re
 import os
@@ -7,7 +9,7 @@ from openai import OpenAI
 import random 
 
 # ======================================================================
-## 0. KHỞI TẠO CLIENT VÀ THIẾT LẬP FLASK
+## 0. KHỞI TẠO CLIENT VÀ THIẾT LẬP FLASK (SETUP)
 # ======================================================================
 
 # Cấu hình Client để kết nối với Ollama đang chạy cục bộ
@@ -22,11 +24,201 @@ except Exception as e:
 
 # KHỞI TẠO ỨNG DỤNG FLASK
 app = Flask(__name__)
-CORS(app) # Cho phép truy cập từ Frontend (CORS)
+# Cho phép truy cập chéo tên miền (CORS)
+CORS(app) 
 
 # ======================================================================
-## 1. DỮ LIỆU CHƯƠNG TRÌNH ĐÀO TẠO (DATA MANAGEMENT MODULE)
-## (Khoảng 200 dòng code)
+## 1. ĐỊNH NGHĨA ENDPOINT CHATBOT (MAIN LOGIC)
+# ======================================================================
+
+# Endpoint giả định cho dữ liệu giảng viên (thường dùng cho Frontend)
+@app.route('/api/lecturers', methods=['GET'])
+def get_lecturers_data():
+    """Endpoint giả định cho dữ liệu giảng viên (hiện đang rỗng)."""
+    return jsonify([]) 
+
+# ĐỊNH NGHĨA ENDPOINT CHATBOT CHÍNH
+@app.route('/chat', methods=['POST'])
+def chat():
+    """
+    Xử lý yêu cầu Chat, dùng logic tĩnh (Python) hoặc Ollama (LLM).
+    Quyết định xử lý dựa trên Intent Parsing.
+    """
+    
+    data = request.get_json()
+    user_input = data.get('message', None) 
+
+    if not user_input:
+        return jsonify({'error': 'Vui lòng gửi tin nhắn.'}), 400
+
+    # Phân tích ý định người dùng (Hàm được định nghĩa ở phần 2)
+    intent = parse_intent(user_input)
+    
+    # --- 1. Xử lý Ý định bằng Logic Tra cứu tĩnh (Ưu tiên) ---
+    if intent["type"] == "single_query":
+        # Gọi hàm xử lý tĩnh (đảm bảo độ chính xác cao)
+        reply = get_program_info(intent["program"], intent["topic"])
+        return jsonify({'bot_reply': reply, 'source': 'static_data'})
+        
+    elif intent["type"] == "compare":
+        # Gọi hàm so sánh tĩnh (đảm bảo độ chính xác cao)
+        reply = compare_programs(intent["topic"])
+        return jsonify({'bot_reply': reply, 'source': 'static_data'})
+
+    elif intent["type"] == "greeting":
+        reply = "Xin chào! Tôi là chatbot tra cứu thông tin về Chương trình **Công nghệ Giáo dục (CNGD)** và **Quản lý Giáo dục (QLGD)**. Tôi có thể giúp bạn tìm thông tin chi tiết hoặc **so sánh** hai ngành này."
+        return jsonify({'bot_reply': reply, 'source': 'greeting'})
+
+    # --- 2. Xử lý các câu hỏi khác bằng LLM / Ollama (Fallback) ---
+    elif intent["type"] == "llm_query" or intent["type"] == "ambiguous_compare":
+        
+        if client is None:
+            reply = "Lỗi: Không thể kết nối với Ollama API. Vui lòng kiểm tra xem Ollama có đang chạy trên cổng 11434 không."
+            return jsonify({'bot_reply': reply, 'source': 'error'}), 500
+
+        try:
+            # System Prompt định hướng cho Ollama
+            messages = [
+                {"role": "system", "content": "Bạn là một trợ lý thân thiện và hữu ích. Hãy trả lời các câu hỏi về giáo dục, công nghệ và các vấn đề chung. Luôn trả lời bằng Tiếng Việt."},
+                {"role": "user", "content": user_input}
+            ]
+            
+            # Gọi API Ollama
+            response = client.chat.completions.create(
+                model="gemma2:9b", 
+                messages=messages,
+                temperature=0.7
+            )
+            
+            reply = response.choices[0].message.content
+            
+            return jsonify({'bot_reply': reply, 'source': 'ollama'})
+
+        except Exception as e:
+            print(f"Lỗi khi gọi Ollama API: {e}")
+            return jsonify({'error': f'Lỗi kết nối Backend. Chi tiết lỗi: {e}'}), 500
+    
+    return jsonify({'bot_reply': "Tôi chưa hiểu rõ câu hỏi của bạn. Vui lòng hỏi lại rõ ràng hơn. (Chuyển cho LLM...)", 'source': 'llm_fallback'})
+
+# ======================================================================
+## 2. LOGIC XỬ LÝ DỮ LIỆU TĨNH (STATIC QUERY LOGIC)
+# ======================================================================
+
+def format_list_to_string(data_list, prefix=" - ", heading=""):
+    """Định dạng danh sách các mục tiêu/cơ hội thành chuỗi có dấu đầu dòng."""
+    output = f"{heading}\n" if heading else ""
+    for item in data_list:
+        output += f"{prefix}{item}\n"
+    return output.strip()
+
+def get_program_info(program_data, topic):
+    """Lấy thông tin chung cho một chủ đề (Mục tiêu, Nghề nghiệp, Slogan, v.v.)."""
+    program_name = program_data["TEN_NGANH"]
+    
+    if topic == "slogan":
+        return f"Slogan của ngành **{program_name}** là: **{program_data['SLOGAN']}**"
+    elif topic == "mục tiêu":
+        heading = f"Mục tiêu của Chương trình {program_name} là trang bị các năng lực sau:"
+        return format_list_to_string(program_data["MUC_TIEU"], prefix="  - ", heading=heading)
+    elif topic == "nghề nghiệp":
+        heading = f"Cơ hội nghề nghiệp dành cho sinh viên tốt nghiệp ngành {program_name} rất đa dạng, bao gồm:"
+        return format_list_to_string(program_data["CO_HOI_NGHE_NGHIEP"], prefix="  * ", heading=heading)
+    elif topic == "xét tuyển":
+        output = f"Các hình thức xét tuyển và tổ hợp của ngành **{program_name}**:\n"
+        output += "| Hình thức | Tổ hợp xét tuyển |\n"
+        output += "|:---------|:-----------------|\n"
+        for hinh_thuc, to_hop in program_data["XET_TUYEN"].items():
+            output += f"| {hinh_thuc} | {to_hop} |\n"
+        return output.strip()
+    elif topic == "doanh nghiệp":
+        heading = f"Các tổ chức, doanh nghiệp hợp tác/hỗ trợ thực tập cho ngành {program_name} bao gồm:"
+        return format_list_to_string(program_data["DOANH_NGHIEP_HOP_TAC"], prefix="  * ", heading=heading)
+    elif topic == "định hướng":
+        heading = f"Ngành {program_name} có các định hướng chuyên sâu sau:"
+        return format_list_to_string(program_data["DINH_HUONG_CHUYEN_SAU"], prefix="  - ", heading=heading)
+        
+    return f"Thông tin về {topic} của ngành {program_name} hiện không có trong dữ liệu tĩnh."
+
+def compare_programs(topic):
+    """So sánh thông tin giữa hai ngành học (CNGD vs QLGD)."""
+    if topic == "xét tuyển":
+        output = "**SO SÁNH TỔ HỢP XÉT TUYỂN (CNGD vs QLGD)**\n"
+        output += "| Hình thức | Công nghệ Giáo dục | Quản lý Giáo dục |\n"
+        output += "|:---------|:--------------------|:-----------------|\n"
+        
+        for hinh_thuc, to_hop_cngd in CNGD_DATA["XET_TUYEN"].items():
+            to_hop_qlgd = QLGD_DATA["XET_TUYEN"].get(hinh_thuc, "-")
+            output += f"| {hinh_thuc} | {to_hop_cngd} | {to_hop_qlgd} |\n"
+        return output.strip()
+    elif topic == "slogan":
+        output = "**SO SÁNH SLOGAN**\n"
+        output += f"**CNGD:** {CNGD_DATA['SLOGAN']}\n"
+        output += f"**QLGD:** {QLGD_DATA['SLOGAN']}\n"
+        return output.strip()
+    elif topic == "định hướng":
+        output = "**SO SÁNH ĐỊNH HƯỚNG CHUYÊN SÂU**\n"
+        output += "**Công nghệ Giáo dục:**\n"
+        output += format_list_to_string(CNGD_DATA["DINH_HUONG_CHUYEN_SAU"], prefix="  - ") + "\n"
+        output += "\n**Quản lý Giáo dục:**\n"
+        output += format_list_to_string(QLGD_DATA["DINH_HUONG_CHUYEN_SAU"], prefix="  - ") + "\n"
+        return output.strip()
+        
+    return "Chức năng so sánh chi tiết cho mục tiêu hoặc nghề nghiệp đang được phát triển. Vui lòng xem thông tin riêng lẻ."
+
+def parse_intent(user_input):
+    """
+    Phân tích đầu vào người dùng (Intent Routing) để xác định:
+    Ngành nào, chủ đề gì, và nên dùng Logic tĩnh hay LLM.
+    """
+    input_lower = user_input.lower().strip()
+    
+    # 1. Xác định Ngành học
+    program_match = None
+    if re.search(r'công nghệ giáo dục|cngd', input_lower):
+        program_match = CNGD_DATA
+    elif re.search(r'quản lý giáo dục|qlgd|quản lí giáo dục', input_lower):
+        program_match = QLGD_DATA
+        
+    # 2. Xác định Ý định So sánh
+    if re.search(r'so sánh|so sanh|khác nhau|điểm chung', input_lower):
+        topic = None
+        if re.search(r'xét tuyển|tổ hợp|khối', input_lower):
+            topic = "xét tuyển"
+        elif re.search(r'slogan|khẩu hiệu', input_lower):
+            topic = "slogan"
+        elif re.search(r'định hướng|chuyên sâu', input_lower):
+            topic = "định hướng"
+        
+        if topic:
+            return {"type": "compare", "topic": topic}
+        return {"type": "ambiguous_compare"} # Chuyển cho LLM
+
+    # 3. Xác định Chủ đề chi tiết (Topic)
+    topic_match = None
+    if re.search(r'slogan|khẩu hiệu', input_lower):
+        topic_match = "slogan"
+    elif re.search(r'mục tiêu|học được gì|trang bị', input_lower):
+        topic_match = "mục tiêu"
+    elif re.search(r'nghề nghiệp|cơ hội|làm việc|vị trí', input_lower):
+        topic_match = "nghề nghiệp"
+    elif re.search(r'xét tuyển|tổ hợp|khối', input_lower):
+        topic_match = "xét tuyển"
+    elif re.search(r'doanh nghiệp|công ty|đối tác|thực tập', input_lower):
+        topic_match = "doanh nghiệp"
+    elif re.search(r'định hướng|chuyên sâu', input_lower):
+        topic_match = "định hướng"
+        
+    # 4. Trả về kết quả phân tích
+    if program_match and topic_match: 
+        return {"type": "single_query", "program": program_match, "topic": topic_match}
+    elif re.search(r'chào|xin chào|start', input_lower):
+        return {"type": "greeting"}
+    else:
+        return {"type": "llm_query"} # Chuyển cho LLM xử lý (fallback)
+
+
+# ======================================================================
+## 3. DỮ LIỆU CHƯƠNG TRÌNH ĐÀO TẠO (STATIC DATA)
 # ======================================================================
 
 # Dữ liệu Ngành Công nghệ Giáo dục (CNGD)
@@ -139,204 +331,16 @@ QLGD_DATA = {
     ]
 }
 
-# ======================================================================
-## 2. LOGIC XỬ LÝ DỮ LIỆU TĨNH (STATIC QUERY LOGIC)
-## (Khoảng 150 dòng code)
-# ======================================================================
-
-def format_list_to_string(data_list, prefix=" - ", heading=""):
-    """Định dạng danh sách các mục tiêu/cơ hội thành chuỗi có dấu đầu dòng."""
-    output = f"{heading}\n" if heading else ""
-    for item in data_list:
-        output += f"{prefix}{item}\n"
-    return output.strip()
-
-def get_program_info(program_data, topic):
-    """Lấy thông tin chung cho một chủ đề (Mục tiêu, Nghề nghiệp, Slogan)."""
-    program_name = program_data["TEN_NGANH"]
-    
-    if topic == "slogan":
-        return f"Slogan của ngành **{program_name}** là: **{program_data['SLOGAN']}**"
-    
-    elif topic == "mục tiêu":
-        heading = f"Mục tiêu của Chương trình {program_name} là trang bị các năng lực sau:"
-        return format_list_to_string(program_data["MUC_TIEU"], prefix="  - ", heading=heading)
-        
-    elif topic == "nghề nghiệp":
-        heading = f"Cơ hội nghề nghiệp dành cho sinh viên tốt nghiệp ngành {program_name} rất đa dạng, bao gồm:"
-        return format_list_to_string(program_data["CO_HOI_NGHE_NGHIEP"], prefix="  * ", heading=heading)
-
-    elif topic == "xét tuyển":
-        output = f"Các hình thức xét tuyển và tổ hợp của ngành **{program_name}**:\n"
-        output += "| Hình thức | Tổ hợp xét tuyển |\n"
-        output += "|:---------|:-----------------|\n"
-        for hinh_thuc, to_hop in program_data["XET_TUYEN"].items():
-            output += f"| {hinh_thuc} | {to_hop} |\n"
-        return output.strip()
-        
-    elif topic == "doanh nghiệp":
-        heading = f"Các tổ chức, doanh nghiệp hợp tác/hỗ trợ thực tập cho ngành {program_name} bao gồm:"
-        return format_list_to_string(program_data["DOANH_NGHIEP_HOP_TAC"], prefix="  * ", heading=heading)
-
-    elif topic == "định hướng":
-        heading = f"Ngành {program_name} có các định hướng chuyên sâu sau:"
-        return format_list_to_string(program_data["DINH_HUONG_CHUYEN_SAU"], prefix="  - ", heading=heading)
-        
-    return f"Thông tin về {topic} của ngành {program_name} hiện không có trong dữ liệu tĩnh."
-
-def compare_programs(topic):
-    """So sánh thông tin giữa hai ngành học."""
-    if topic == "xét tuyển":
-        output = "**SO SÁNH TỔ HỢP XÉT TUYỂN (CNGD vs QLGD)**\n"
-        output += "| Hình thức | Công nghệ Giáo dục | Quản lý Giáo dục |\n"
-        output += "|:---------|:--------------------|:-----------------|\n"
-        
-        for hinh_thuc, to_hop_cngd in CNGD_DATA["XET_TUYEN"].items():
-            to_hop_qlgd = QLGD_DATA["XET_TUYEN"].get(hinh_thuc, "-")
-            output += f"| {hinh_thuc} | {to_hop_cngd} | {to_hop_qlgd} |\n"
-        return output.strip()
-        
-    elif topic == "slogan":
-        output = "**SO SÁNH SLOGAN**\n"
-        output += f"**CNGD:** {CNGD_DATA['SLOGAN']}\n"
-        output += f"**QLGD:** {QLGD_DATA['SLOGAN']}\n"
-        return output.strip()
-        
-    elif topic == "định hướng":
-        output = "**SO SÁNH ĐỊNH HƯỚNG CHUYÊN SÂU**\n"
-        output += "**Công nghệ Giáo dục:**\n"
-        output += format_list_to_string(CNGD_DATA["DINH_HUONG_CHUYEN_SAU"], prefix="  - ") + "\n"
-        output += "\n**Quản lý Giáo dục:**\n"
-        output += format_list_to_string(QLGD_DATA["DINH_HUONG_CHUYEN_SAU"], prefix="  - ") + "\n"
-        return output.strip()
-        
-    return "Chức năng so sánh chi tiết cho mục tiêu hoặc nghề nghiệp đang được phát triển. Vui lòng xem thông tin riêng lẻ."
-
-def parse_intent(user_input):
-    """Phân tích đầu vào người dùng để xác định Ngành, Chủ đề và Ý định (Sử dụng regex)."""
-    input_lower = user_input.lower().strip()
-    
-    # 1. Xác định Ngành học
-    program_match = None
-    if re.search(r'công nghệ giáo dục|cngd', input_lower):
-        program_match = CNGD_DATA
-    elif re.search(r'quản lý giáo dục|qlgd|quản lí giáo dục', input_lower):
-        program_match = QLGD_DATA
-        
-    # 2. Xác định Ý định So sánh
-    if re.search(r'so sánh|so sanh|khác nhau|điểm chung', input_lower):
-        topic = None
-        if re.search(r'xét tuyển|tổ hợp|khối', input_lower):
-            topic = "xét tuyển"
-        elif re.search(r'slogan|khẩu hiệu', input_lower):
-            topic = "slogan"
-        elif re.search(r'định hướng|chuyên sâu', input_lower):
-            topic = "định hướng"
-        
-        if topic:
-            return {"type": "compare", "topic": topic}
-        return {"type": "ambiguous_compare"} 
-
-    # 3. Xác định Chủ đề chi tiết (Topic)
-    topic_match = None
-    if re.search(r'slogan|khẩu hiệu', input_lower):
-        topic_match = "slogan"
-    elif re.search(r'mục tiêu|học được gì|trang bị', input_lower):
-        topic_match = "mục tiêu"
-    elif re.search(r'nghề nghiệp|cơ hội|làm việc|vị trí', input_lower):
-        topic_match = "nghề nghiệp"
-    elif re.search(r'xét tuyển|tổ hợp|khối', input_lower):
-        topic_match = "xét tuyển"
-    elif re.search(r'doanh nghiệp|công ty|đối tác|thực tập', input_lower):
-        topic_match = "doanh nghiệp"
-    elif re.search(r'định hướng|chuyên sâu', input_lower):
-        topic_match = "định hướng"
-    elif re.search(r'giới thiệu|thông tin chung', input_lower):
-        topic_match = "giới thiệu"
-        
-    # 4. Trả về kết quả phân tích
-    if program_match and topic_match and topic_match != "giới thiệu": 
-        return {"type": "single_query", "program": program_match, "topic": topic_match}
-    elif re.search(r'chào|xin chào|start', input_lower):
-        return {"type": "greeting"}
-    else:
-        return {"type": "llm_query"} # Chuyển cho LLM xử lý
-
-# ======================================================================
-## 3. ENDPOINT FLASK (API CHAT VÀ DỮ LIỆU)
-## (Khoảng 100 dòng code)
-# ======================================================================
-
-# Định nghĩa endpoint cho dữ liệu giảng viên (nếu có)
-@app.route('/api/lecturers', methods=['GET'])
-def get_lecturers_data():
-    """Endpoint giả định cho dữ liệu giảng viên (hiện đang rỗng)."""
-    return jsonify([]) 
-
-# ĐỊNH NGHĨA ENDPOINT CHATBOT
-@app.route('/chat', methods=['POST'])
-def chat():
-    """Xử lý yêu cầu Chat, dùng logic tĩnh hoặc Ollama."""
-    
-    data = request.get_json()
-    user_input = data.get('message', None) 
-
-    if not user_input:
-        return jsonify({'error': 'Vui lòng gửi tin nhắn.'}), 400
-
-    intent = parse_intent(user_input)
-    
-    # 3. Xử lý Ý định (Dùng Logic Tra cứu tĩnh)
-    if intent["type"] == "single_query":
-        reply = get_program_info(intent["program"], intent["topic"])
-        return jsonify({'bot_reply': reply, 'source': 'static_data'})
-        
-    elif intent["type"] == "compare":
-        reply = compare_programs(intent["topic"])
-        return jsonify({'bot_reply': reply, 'source': 'static_data'})
-
-    elif intent["type"] == "greeting":
-        reply = "Xin chào! Tôi là chatbot tra cứu thông tin về Chương trình **Công nghệ Giáo dục (CNGD)** và **Quản lý Giáo dục (QLGD)**. Tôi có thể giúp bạn tìm thông tin chi tiết hoặc **so sánh** hai ngành này."
-        return jsonify({'bot_reply': reply, 'source': 'greeting'})
-
-    # 4. Xử lý các câu hỏi khác (Chuyển cho LLM / Ollama)
-    elif intent["type"] == "llm_query" or intent["type"] == "ambiguous_compare":
-        
-        if client is None:
-            reply = "Lỗi: Hệ thống tra cứu thông tin tĩnh không tìm thấy câu trả lời. Đồng thời, không thể kết nối với Ollama API. Vui lòng kiểm tra xem Ollama có đang chạy trên cổng 11434 không."
-            return jsonify({'bot_reply': reply, 'source': 'error'}), 500
-
-        try:
-            messages = [
-                {"role": "system", "content": "Bạn là một trợ lý thân thiện và hữu ích. Hãy trả lời các câu hỏi về giáo dục, công nghệ và các vấn đề chung. Luôn trả lời bằng Tiếng Việt."},
-                {"role": "user", "content": user_input}
-            ]
-            
-            response = client.chat.completions.create(
-                model="gemma2:9b", 
-                messages=messages,
-                temperature=0.7
-            )
-            
-            reply = response.choices[0].message.content
-            
-            return jsonify({'bot_reply': reply, 'source': 'ollama'})
-
-        except Exception as e:
-            print(f"Lỗi khi gọi Ollama API: {e}")
-            return jsonify({'error': f'Lỗi kết nối Backend. Hãy kiểm tra Ollama có đang chạy không. Chi tiết lỗi: {e}'}), 500
-    
-    return jsonify({'bot_reply': "Tôi chưa hiểu rõ câu hỏi của bạn. Vui lòng hỏi lại rõ ràng hơn. (Chuyển cho LLM...)", 'source': 'llm_fallback'})
-
 
 # ====================================================================
 # CHẠY ỨNG DỤNG FLASK (MAIN EXECUTION)
 # ====================================================================
 if __name__ == '__main__':
     print("=================================================================")
-    print("Hệ thống Chatbot/API đã khởi động...")
+    print("Hệ thống Chatbot/API đã khởi động (Đã sắp xếp lại code)...")
     print("Truy cập http://localhost:5000/chat (POST) để dùng Chatbot.")
-    print("Đảm bảo Ollama đang chạy trên cổng 11434.")
+    print("Đảm bảo Ollama đang chạy trên cổng 11434 và mô hình gemma2:9b đã được tải.")
     print("=================================================================")
     
+    # Khởi chạy máy chủ Flask
     app.run(host='0.0.0.0', port=5000, debug=True)
