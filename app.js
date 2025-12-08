@@ -219,7 +219,7 @@ const lecturers = [
 {
   "key": "Co Thuy xinh dep",
   "img": "img/co-thuy.jpg",
-  "name": "TS. Nguyễn Thị Thanh Thủy",
+  "name": "Co Thuy xinh dep",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
   "office": "M329, C7",
