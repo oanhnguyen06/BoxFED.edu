@@ -217,7 +217,7 @@ const lecturers = [
   ]
 },
 {
-  "key": "nguyen_thi_thanh_thuy",
+  "key": "Co Thuy xinh dep",
   "img": "img/co-thuy.jpg",
   "name": "TS. Nguyễn Thị Thanh Thủy",
   "title": "Giảng viên",
