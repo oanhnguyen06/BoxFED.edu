@@ -190,7 +190,7 @@ const lecturers = [
 {
   "key": "vu_dinh_minh",
   "img": "img/thay-minh.jpg",
-  "name": "TS. Vũ Đình Minh",
+  "name": "Thay  minh",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
   "office": "M329, Nhà C7",
