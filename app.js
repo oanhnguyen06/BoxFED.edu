@@ -190,7 +190,7 @@ const lecturers = [
 {
   "key": "vu_dinh_minh",
   "img": "img/thay-minh.jpg",
-  "name": "Thay  minh",
+  "name": "TS. Vũ Đình Minh",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
   "office": "M329, Nhà C7",
@@ -217,9 +217,9 @@ const lecturers = [
   ]
 },
 {
-  "key": "Co Thuy xinh dep",
+  "key": "nguyen_thi_thanh_thuy",
   "img": "img/co-thuy.jpg",
-  "name": "Co Thuy xinh dep",
+  "name": "TS. Nguyễn Thị Thanh Thủy",
   "title": "Giảng viên",
   "dept": "Bộ môn Sư phạm các ngành kỹ thuật, Viện Sư phạm Kỹ thuật, Đại học Bách Khoa Hà Nội",
   "office": "M329, C7",
