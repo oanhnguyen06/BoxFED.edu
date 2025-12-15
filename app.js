@@ -1,5 +1,5 @@
 
-// ================= DỮ LIỆU GIẢNG VIÊN (20+ entries) =================
+// ================= DỮ LIỆU GIẢNG VIÊN =================
 // NOTE: ảnh sẽ là đường dẫn img/<ho_ten>.jpg 
 const lecturers = [
  {
