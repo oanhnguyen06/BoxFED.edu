@@ -1,4 +1,4 @@
-const backendURL = "https://boxfed-backend.onrender.com";
+http://localhost:3000
 
 async function sendChat() {
     const input = document.getElementById("chatbot-input");
