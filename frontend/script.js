@@ -1,4 +1,4 @@
-http://localhost:3000
+const backendURL = "http://localhost:3000";
 
 async function sendChat() {
     const input = document.getElementById("chatbot-input");
