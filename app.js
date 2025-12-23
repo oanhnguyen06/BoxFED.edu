@@ -304,4 +304,4 @@ chatInput.addEventListener("keypress", e => {
 });
 
 // ===== INIT =====
-renderLecturers();
+
