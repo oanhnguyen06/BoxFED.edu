@@ -3,8 +3,8 @@ import csv
 import json
 from pathlib import Path
 
-CSV_FILE = Path("data/lecturers.csv")
-JSON_FILE = Path("data/lecturers.json")
+CSV_FILE = Path("lecturers.csv")
+JSON_FILE = Path("lecturers.json")
 
 def split_field(value):
     if not value:
