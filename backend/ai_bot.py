@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tên File: server_rearranged.py (Phiên bản đã sắp xếp lại)
+# Tên File: server_rearranged.py 
 
 import re
 import os
@@ -344,3 +344,4 @@ if __name__ == '__main__':
     
     # Khởi chạy máy chủ Flask
     app.run(host='0.0.0.0', port=5000, debug=True)
+
