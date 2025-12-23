@@ -1,7 +1,5 @@
 
-// ================= DỮ LIỆU GIẢNG VIÊN =================
-// NOTE: ảnh sẽ là đường dẫn img/<ho_ten>.jpg 
-const lecturers = [
+
  {
   "key": "le_hieu_hoc",
   "img": "img/thay-hoc.png",
@@ -669,5 +667,5 @@ const lecturers = [
     "Phát triển chuyên môn giáo viên"
   ]
 }
-];
+
 // ================ END DATA =====================
