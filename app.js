@@ -11,7 +11,7 @@ fetch("data/lecturers.json")
     renderLecturers();
   })
   .catch(err => {
-    console.error("❌ Cannot load lecturers.json", err);
+    console.error(" Cannot load lecturers.json", err);
   });
 
 // ================= RENDER LECTURERS =================
