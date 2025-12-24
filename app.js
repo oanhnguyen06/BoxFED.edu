@@ -672,7 +672,7 @@ const lecturers = [
 }
 ];
 // ================ END DATA =====================
-
+document.addEventListener("DOMContentLoaded", () => {
 // ===== PAGINATION & LECTURER CARD =====
 let currentPage = 1;
 const itemsPerPage = 4;
@@ -926,4 +926,6 @@ chatInput.addEventListener("keypress", e => {
 });
 
 // ===== INIT =====
-renderLecturers();
+
+ renderLecturers();
+});
