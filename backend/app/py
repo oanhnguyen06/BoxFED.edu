@@ -2,20 +2,20 @@
 import os
 import re
 import json
-import pandas as pd # <-- THÊM THƯ VIỆN NÀY
+import pandas as pd 
 from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from docx import Document
 import requests
 from dotenv import load_dotenv
-from werkzeug.utils import secure_filename # <-- THÊM THƯ VIỆN NÀY
+from werkzeug.utils import secure_filename 
 
 load_dotenv() # optional .env
 
 # --- Config ---
 OLLAMA_BASE = os.getenv("OLLAMA_BASE", "http://localhost:11434/v1")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma2:9b") # thay theo model của bạn
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma2:9b") 
 DATA_DIR = Path(__file__).parent / "data"
 UPLOAD_DIR = Path(__file__).parent / "uploads"
 DATA_DIR.mkdir(exist_ok=True)
