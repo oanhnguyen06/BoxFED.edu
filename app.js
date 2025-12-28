@@ -739,13 +739,14 @@ function renderPagination() {
   `;
 }
 
-function goPage(p) {
+window.goPage = function (p) {
   const totalPages = Math.ceil(lecturers.length / itemsPerPage);
   if (p < 1 || p > totalPages) return;
   currentPage = p;
   renderLecturers();
-  document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
-}
+  document.querySelector('.container')?.scrollIntoView({ behavior: 'smooth' });
+};
+
 
 // ===== MODAL =====
 function openLecturer(key) {
