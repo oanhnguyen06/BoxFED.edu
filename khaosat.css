@@ -1,0 +1,46 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 40px;
+  background: #f5f7fb;
+}
+
+h1, h2 {
+  color: #1e40af;
+}
+
+form {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+}
+
+input, button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+#lecturers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 16px;
+}
+
+.card {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+}
