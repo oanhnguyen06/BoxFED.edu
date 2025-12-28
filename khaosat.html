@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>VARK Hub – Khảo sát</title>
+  <link rel="stylesheet" href="review.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>VARK HUB – Khảo sát phong cách học tập</h1>
+
+<form id="surveyForm">
+  <input type="email" id="email" placeholder="Email nhận kết quả" required />
+
+  <h3>Câu hỏi (1–5 điểm)</h3>
+
+  <label>Thích học qua hình ảnh</label>
+  <input type="number" id="visual" min="1" max="5" required />
+
+  <label>Thích nghe giảng, thảo luận</label>
+  <input type="number" id="aural" min="1" max="5" required />
+
+  <label>Thích đọc – ghi chép</label>
+  <input type="number" id="readwrite" min="1" max="5" required />
+
+  <label>Thích thực hành, trải nghiệm</label>
+  <input type="number" id="kinesthetic" min="1" max="5" required />
+
+  <button type="submit">Hoàn thành khảo sát</button>
+</form>
+
+<section id="result" class="hidden">
+  <h2>Kết quả của bạn</h2>
+  <canvas id="radarChart"></canvas>
+
+  <h3>Giảng viên phù hợp</h3>
+  <div id="lecturers"></div>
+
+  <a href="connect.html">➡ Kết nối bạn học</a>
+</section>
+
+<script src="review.js"></script>
+</body>
+</html>
