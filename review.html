@@ -1,45 +1,173 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>VARK Hub – Khảo sát</title>
-  <link rel="stylesheet" href="review.css" />
+  <meta charset="UTF-8">
+  <title>Khảo sát phong cách học tập VARK</title>
+  <link rel="stylesheet" href="khaosat.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<h1>VARK HUB – Khảo sát phong cách học tập</h1>
+<h1>Bảng câu hỏi khảo sát VARK</h1>
+<p>
+Hãy chọn những đáp án giải thích rõ nhất sở thích của bạn.  
+Bạn có thể chọn nhiều đáp án cho mỗi câu.
+</p>
 
 <form id="surveyForm">
-  <input type="email" id="email" placeholder="Email nhận kết quả" required />
 
-  <h3>Câu hỏi (1–5 điểm)</h3>
+<!-- CÂU 1 -->
+<fieldset>
+<legend>1. Tôi muốn tiết kiệm nhiều tiền hơn và quyết định giữa các sự lựa chọn. Tôi sẽ:</legend>
+<label><input type="checkbox" value="K"> Cân nhắc các ví dụ dựa trên thông tin tài chính của bản thân</label>
+<label><input type="checkbox" value="V"> Sử dụng đồ thị để diễn tả các lựa chọn</label>
+<label><input type="checkbox" value="R"> Đọc tài liệu miêu tả chi tiết các lựa chọn</label>
+<label><input type="checkbox" value="A"> Nói chuyện với một chuyên gia</label>
+</fieldset>
 
-  <label>Thích học qua hình ảnh</label>
-  <input type="number" id="visual" min="1" max="5" required />
+<!-- CÂU 2 -->
+<fieldset>
+<legend>2. Khi lựa chọn nghề nghiệp/lĩnh vực học tập, tôi coi trọng:</legend>
+<label><input type="checkbox" value="R"> Sử dụng từ ngữ tốt trong giao tiếp bằng văn bản</label>
+<label><input type="checkbox" value="A"> Thảo luận, giao tiếp với người khác</label>
+<label><input type="checkbox" value="V"> Làm việc với bản thiết kế, bản đồ, biểu đồ</label>
+<label><input type="checkbox" value="K"> Áp dụng kiến thức vào thực tế</label>
+</fieldset>
 
-  <label>Thích nghe giảng, thảo luận</label>
-  <input type="number" id="aural" min="1" max="5" required />
+<!-- CÂU 3 -->
+<fieldset>
+<legend>3. Tôi có vấn đề tim mạch. Tôi mong bác sĩ sẽ:</legend>
+<label><input type="checkbox" value="V"> Đưa ra sơ đồ thông tin về bệnh</label>
+<label><input type="checkbox" value="A"> Miêu tả bệnh cho tôi nghe</label>
+<label><input type="checkbox" value="R"> Đưa tài liệu giải thích để đọc</label>
+<label><input type="checkbox" value="K"> Sử dụng mô hình nhựa minh họa</label>
+</fieldset>
 
-  <label>Thích đọc – ghi chép</label>
-  <input type="number" id="readwrite" min="1" max="5" required />
+<!-- CÂU 4 -->
+<fieldset>
+<legend>4. Tôi muốn học cách chụp ảnh đẹp hơn, tôi sẽ:</legend>
+<label><input type="checkbox" value="A"> Hỏi và nói chuyện với người khác</label>
+<label><input type="checkbox" value="V"> Xem sơ đồ cấu tạo máy ảnh</label>
+<label><input type="checkbox" value="K"> Xem ví dụ ảnh đẹp/xấu và thực hành</label>
+<label><input type="checkbox" value="R"> Đọc tài liệu hướng dẫn</label>
+</fieldset>
 
-  <label>Thích thực hành, trải nghiệm</label>
-  <input type="number" id="kinesthetic" min="1" max="5" required />
+<!-- CÂU 5 -->
+<fieldset>
+<legend>5. Tôi muốn tìm hiểu chuyến du lịch của mình, tôi sẽ:</legend>
+<label><input type="checkbox" value="A"> Nói chuyện với người lên kế hoạch</label>
+<label><input type="checkbox" value="V"> Xem thông tin hình ảnh, hoạt động</label>
+<label><input type="checkbox" value="V"> Sử dụng bản đồ</label>
+<label><input type="checkbox" value="R"> Đọc lịch trình di chuyển</label>
+</fieldset>
 
-  <button type="submit">Hoàn thành khảo sát</button>
+<!-- CÂU 6 -->
+<fieldset>
+<legend>6. Khi học, tôi thường:</legend>
+<label><input type="checkbox" value="K"> Sử dụng ví dụ và ứng dụng</label>
+<label><input type="checkbox" value="A"> Thích nói chuyện, thảo luận</label>
+<label><input type="checkbox" value="V"> Nhìn thấy họa tiết, đặc điểm</label>
+<label><input type="checkbox" value="R"> Đọc sách, báo, bản tin</label>
+</fieldset>
+
+<!-- CÂU 7 -->
+<fieldset>
+<legend>7. Tôi muốn học chơi một trò chơi, tôi sẽ:</legend>
+<label><input type="checkbox" value="A"> Nghe người khác giải thích</label>
+<label><input type="checkbox" value="K"> Xem người khác chơi rồi tham gia</label>
+<label><input type="checkbox" value="R"> Đọc hướng dẫn</label>
+<label><input type="checkbox" value="V"> Xem sơ đồ chiến thuật</label>
+</fieldset>
+
+<!-- CÂU 8 -->
+<fieldset>
+<legend>8. Tôi muốn học làm việc mới trên máy tính, tôi sẽ:</legend>
+<label><input type="checkbox" value="V"> Sử dụng sơ đồ trong sách</label>
+<label><input type="checkbox" value="K"> Tự mò mẫm và thực hành</label>
+<label><input type="checkbox" value="R"> Đọc chỉ dẫn viết</label>
+<label><input type="checkbox" value="A"> Nói chuyện với người biết</label>
+</fieldset>
+
+<!-- CÂU 9 -->
+<fieldset>
+<legend>9. Khi nhận phản hồi bài thi, tôi muốn:</legend>
+<label><input type="checkbox" value="K"> Ví dụ cụ thể từ bài làm</label>
+<label><input type="checkbox" value="V"> Bảng biểu kết quả</label>
+<label><input type="checkbox" value="R"> Phản hồi bằng văn bản</label>
+<label><input type="checkbox" value="A"> Có người giải thích trực tiếp</label>
+</fieldset>
+
+<!-- CÂU 10 -->
+<fieldset>
+<legend>10. Khi cần tìm đường, tôi sẽ:</legend>
+<label><input type="checkbox" value="V"> Sử dụng bản đồ</label>
+<label><input type="checkbox" value="A"> Nhờ người chỉ đường</label>
+<label><input type="checkbox" value="R"> Viết ra chỉ dẫn</label>
+<label><input type="checkbox" value="K"> Liên hệ với địa điểm quen thuộc</label>
+</fieldset>
+
+<!-- CÂU 11 -->
+<fieldset>
+<legend>11. Khi học qua video hướng dẫn, tôi học tốt nhất bằng cách:</legend>
+<label><input type="checkbox" value="K"> Xem hành động</label>
+<label><input type="checkbox" value="A"> Nghe video</label>
+<label><input type="checkbox" value="V"> Xem sơ đồ</label>
+<label><input type="checkbox" value="R"> Đọc hướng dẫn</label>
+</fieldset>
+
+<!-- CÂU 12 -->
+<fieldset>
+<legend>12. Khi học online, tôi thích:</legend>
+<label><input type="checkbox" value="R"> Văn bản, mô tả, danh sách</label>
+<label><input type="checkbox" value="A"> Các kênh âm thanh</label>
+<label><input type="checkbox" value="K"> Video hướng dẫn</label>
+<label><input type="checkbox" value="V"> Thiết kế, hình ảnh</label>
+</fieldset>
+
+<!-- CÂU 13 -->
+<fieldset>
+<legend>13. Tôi thích giáo viên sử dụng:</legend>
+<label><input type="checkbox" value="R"> Sách, tài liệu</label>
+<label><input type="checkbox" value="K"> Thực hành, làm mẫu</label>
+<label><input type="checkbox" value="A"> Thảo luận, hỏi đáp</label>
+<label><input type="checkbox" value="V"> Sơ đồ, biểu đồ</label>
+</fieldset>
+
+<!-- CÂU 14 -->
+<fieldset>
+<legend>14. Khi tìm hiểu dự án mới, tôi muốn:</legend>
+<label><input type="checkbox" value="A"> Thảo luận về dự án</label>
+<label><input type="checkbox" value="R"> Báo cáo bằng văn bản</label>
+<label><input type="checkbox" value="K"> Ví dụ dự án đã áp dụng</label>
+<label><input type="checkbox" value="V"> Sơ đồ các giai đoạn</label>
+</fieldset>
+
+<!-- CÂU 15 -->
+<fieldset>
+<legend>15. Khi lắp ráp đồ vật, tôi sẽ:</legend>
+<label><input type="checkbox" value="A"> Nghe lời khuyên</label>
+<label><input type="checkbox" value="R"> Đọc hướng dẫn</label>
+<label><input type="checkbox" value="V"> Xem sơ đồ lắp ráp</label>
+<label><input type="checkbox" value="K"> Xem video và làm theo</label>
+</fieldset>
+
+<!-- CÂU 16 -->
+<fieldset>
+<legend>16. Khi tìm hiểu nhà/căn hộ, tôi muốn:</legend>
+<label><input type="checkbox" value="R"> Đọc mô tả chi tiết</label>
+<label><input type="checkbox" value="V"> Xem sơ đồ, bản đồ</label>
+<label><input type="checkbox" value="A"> Thảo luận với chủ nhà</label>
+<label><input type="checkbox" value="K"> Xem video thực tế</label>
+</fieldset>
+
+<button type="submit">Xem kết quả</button>
 </form>
 
-<section id="result" class="hidden">
-  <h2>Kết quả của bạn</h2>
+<section id="result" style="display:none">
+  <h2>Kết quả phong cách học tập</h2>
   <canvas id="radarChart"></canvas>
-
-  <h3>Giảng viên phù hợp</h3>
-  <div id="lecturers"></div>
-
-  <a href="connect.html">➡ Kết nối bạn học</a>
 </section>
 
-<script src="review.js"></script>
+<script src="khaosat.js"></script>
 </body>
 </html>
