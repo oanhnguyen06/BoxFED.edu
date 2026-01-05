@@ -679,8 +679,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   const itemsPerPage = 4;
 
-  // lecturers: dữ liệu gốc (đã load từ json trước đó)
-  // displayLecturers: dữ liệu đang hiển thị (search / filter)
+  
+  
   let displayLecturers = lecturers;
 
   // ================= RENDER LECTURERS =================
